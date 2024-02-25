@@ -28,7 +28,7 @@
     "express-validator": "^7.0.1",
     "mysql2": "^3.9.1",
     "nodemon": "^3.0.1",
-    "sequelize": "^6.36.0",
+    "sequelize": "^6.37.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
