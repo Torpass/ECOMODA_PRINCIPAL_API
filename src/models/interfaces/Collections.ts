@@ -1,5 +1,5 @@
 export default interface Collections {
-    id: number;
+    id?: number;
     collection: string;
     created_at: Date;
     standar_quantity: number;
