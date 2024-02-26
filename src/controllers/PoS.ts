@@ -71,3 +71,20 @@ export async function getAllStores(_req: Request, res: Response) {
 		return res.status(500).send('ERROR_GETING_STORES');
 	}
 }
+
+export async function deletestore(req: Request, res : Response) {
+    try{
+        const {idstore} = req.params;
+        
+        await StoreModel.destroy({
+            where: {
+              id: idstore
+            },
+          });
+        return res.status(500).send('STORE_DELETED');
+    }catch(error: any){
+        console.log(error);
+        return res.status(500).send('ERROR_DELETING_STORE');
+    }
+    
+}
