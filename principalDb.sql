@@ -191,6 +191,7 @@ CREATE TABLE `materials` (
   `id` int NOT NULL AUTO_INCREMENT,
   `material` varchar(256) DEFAULT NULL,
   `unit` enum('meters','unit') DEFAULT NULL COMMENT 'unit enum represents how materials are counted, in this case; metters ',
+  `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -363,4 +364,4 @@ CREATE TABLE `used_materials` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-25 16:56:34
+-- Dump completed on 2024-02-26 18:19:21
