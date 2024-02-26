@@ -40,3 +40,34 @@ export async function updatestore(req: Request, res: Response) {
 		return res.status(500).send('ERROR_GETING_STORES');
 	}
 }
+
+export async function getonetores(req: Request, res: Response) {
+	try {
+        const {idstore} = req.params;
+
+        const store = await StoreModel.findOne({
+            where: {id: idstore}
+        });
+
+        if(!store) return res.status(404).send('STORE_NOT_FOUND');
+
+
+        return res.status(200).send({store});
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETING_STORES');
+	}
+}
+
+export async function getAllStores(_req: Request, res: Response) {
+	try {
+        const stores = await StoreModel.findAll();
+
+        return res.status(200).send({stores});
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETING_STORES');
+	}
+}

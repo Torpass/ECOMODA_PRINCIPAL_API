@@ -1,5 +1,5 @@
 import express from 'express';
-import {createstore, updatestore} from '../controllers/PoS';
+import {createstore, updatestore, getonetores, getAllStores} from '../controllers/PoS';
 import { storevalidator } from '../validators/storeValidator';
 const router = express.Router();
 
@@ -13,6 +13,9 @@ router.put('/updatestore/:idstore',
             updatestore
 );
 
+router.get('/getonestore/:idstore', getonetores);
+
+router.get('/getallstores', getAllStores);
 
 
 module.exports = router;
