@@ -18,9 +18,7 @@ export async function createstore(req: Request, res: Response) {
 
 export async function updatestore(req: Request, res: Response) {
 	try {
-        console.log(req);
         const {idstore} = req.params;
-        
         const { name} = matchedData(req);
             
         const posup = await StoreModel.update({
