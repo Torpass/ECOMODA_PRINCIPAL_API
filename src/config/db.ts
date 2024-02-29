@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 const Connect = process.env['MYSQL_NAME'] || 'ECOMODA';
 const username = process.env['MYSQL_USER'] || 'root';
-const password  = process.env['MYSQL_PASSWORD'] || "Pastor313@234";
+const password  = process.env['MYSQL_PASSWORD'] || "";
 const host = process.env['MYSQL_HOST'] || 'localhost';
 
 const sequelize = new Sequelize(Connect, username, password, {host: host, dialect:'mysql'});

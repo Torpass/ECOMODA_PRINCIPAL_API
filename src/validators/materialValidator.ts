@@ -14,9 +14,9 @@ export const materialValidator = [
         .isString()
         .isIn(['meters', 'unit']), // Verifica que el valor esté dentro de los permitidos ('meters' o 'unit')
     check('description')
-        .optional() // Marca como opcional, ya que puede que no siempre se proporcione una descripción
+        .optional() // Es opcional ya que puede que no siempre se da una descripción
         .isString()
-        .isLength({ max: 255 }), // Establece una longitud máxima para la descripción
+        .isLength({ max: 255 }),
     (req: Request, res: Response, next: NextFunction) => {
         console.log(req.body)
         return validationResults(req, res, next);

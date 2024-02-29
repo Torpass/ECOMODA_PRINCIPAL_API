@@ -1,10 +1,10 @@
 import express from 'express';
-import {createMaterial, updateMaterial, getoneMaterial, getAllMaterials, deleteMaterial} from '../controllers/design/Materials';
+import {createMaterial, updateMaterial, getOneMaterial, getAllMaterials, deleteMaterial} from '../controllers/design/Materials';
 import { materialValidator } from '../validators/materialValidator';
 const router = express.Router();
 
 router.post('/creatematerial',
-            materialValidator,//aqui va el validador
+            materialValidator,
             createMaterial
 );
 
@@ -13,7 +13,7 @@ router.put('/updatematerial/:idmaterial',
             updateMaterial
 );
 
-router.get('/getonematerial/:idmaterial', getoneMaterial);
+router.get('/getonematerial/:idmaterial', getOneMaterial);
 
 router.get('/getallmaterial', getAllMaterials);
 
