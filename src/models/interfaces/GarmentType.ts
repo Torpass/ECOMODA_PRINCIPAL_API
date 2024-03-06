@@ -1,4 +1,4 @@
 export default interface GarmentType {
-    id: number;
+    id?: number;
     type: string
 }
