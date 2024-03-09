@@ -5,7 +5,6 @@ import StoreModel from '../models/sells/store';
 export async function createstore(req: Request, res: Response) {
 	try {
         const {name} = matchedData(req);
-        console.log(name);
         const storecred = await StoreModel.create({name});
 
         return res.status(200).send({storecred});
