@@ -1,4 +1,4 @@
 export default interface Factura_cabecera {
-    id: number;
+    id?: number;
     customer_id: number
 }
