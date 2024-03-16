@@ -1,6 +1,6 @@
 import {Model, DataTypes} from 'sequelize'
-import { sequelize } from '../config/db';
-import ProductInterface from './interfaces/Products';
+import { sequelize } from '../../config/db';
+import ProductInterface from '../interfaces/Products';
 
 
 class ProductModel extends Model<ProductInterface> implements ProductInterface {

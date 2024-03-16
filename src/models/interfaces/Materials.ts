@@ -3,4 +3,5 @@ export default interface Materials {
     material: string;
     unit: 'meters' | 'unit';
     description?: string;
+    quantity:number;
 }
