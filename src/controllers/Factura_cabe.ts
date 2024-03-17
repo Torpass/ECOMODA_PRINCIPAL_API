@@ -80,10 +80,11 @@ export async function deletgetAllINVOICE(req: Request, res : Response) {
               id: id
             },
           });
-        return res.status(500).send('INVOICE_DELETED');
+        return res.status(200).send('INVOICE_DELETED');
     }catch(error: any){
         console.log(error);
         return res.status(500).send('ERROR_DELETING_INVOICE');
     }
     
 }
+

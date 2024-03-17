@@ -80,7 +80,7 @@ export async function deletestore(req: Request, res : Response) {
               id: idstore
             },
           });
-        return res.status(500).send('STORE_DELETED');
+        return res.status(200).send('STORE_DELETED');
     }catch(error: any){
         console.log(error);
         return res.status(500).send('ERROR_DELETING_STORE');
