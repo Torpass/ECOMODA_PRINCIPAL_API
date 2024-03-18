@@ -1,4 +1,4 @@
 export default interface Size {
-    id: number;
+    id?: number;
     size:string;
 }
