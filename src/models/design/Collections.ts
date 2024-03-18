@@ -6,8 +6,9 @@ import Collections from '../interfaces/Collections';
 class CollectionModel extends Model<Collections> implements Collections {
     public id!: number;
     public collection!: string;
-    public created_at!: Date;
-    public standar_quantity!: number;
+    public standard_quantity!: number;
+    public createdAt!: Date;
+    public updatedAt!: Date;
 
     // Metodos personalizados
     
@@ -22,11 +23,14 @@ CollectionModel.init(
         collection: {
             type: DataTypes.STRING,
         },
-        created_at: {
+        standard_quantity: {
+            type: DataTypes.INTEGER,
+        },
+        createdAt: {
             type: DataTypes.DATE,
         },
-        standar_quantity: {
-            type: DataTypes.INTEGER,
+        updatedAt: {
+            type: DataTypes.DATE,
         },
     },
 
