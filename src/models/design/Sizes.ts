@@ -2,7 +2,6 @@ import {Model, DataTypes} from 'sequelize'
 import { sequelize } from '../../config/db';
 import Size from '../interfaces/Size';
 
-
 class SizeModel extends Model<Size> implements Size {
     public id!: number;
     public size!: string;

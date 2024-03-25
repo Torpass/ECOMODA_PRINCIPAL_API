@@ -37,8 +37,8 @@ CollectionModel.init(
     {
         sequelize,
         tableName: "collections",
-        timestamps: false,
+        timestamps: true,
     }
+    
 );
-
 export default CollectionModel;
