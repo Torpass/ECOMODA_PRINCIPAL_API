@@ -5,10 +5,7 @@ import GarmentType from '../interfaces/GarmentType';
 
 class GarmentTypeModel extends Model<GarmentType> implements GarmentType {
     public id!: number;
-    public type!: string;
-
-    // Metodos personalizados
-    
+    public type!: string;    
 }
 
 GarmentTypeModel.init(
@@ -24,7 +21,7 @@ GarmentTypeModel.init(
 
     {
         sequelize,
-        tableName: "sizes",
+        tableName: "garment_types",
         timestamps: false,
     }
 );
