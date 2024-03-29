@@ -4,9 +4,9 @@ import collectionModel from '../../models/design/Collections';
 
 export async function createCollection(req: Request, res: Response) {
 	try {
-        const { collection, createdAt, updatedAt, standard_quantity } = matchedData(req);
+        const { collection, standard_quantity } = matchedData(req);
 
-        const collectioncred = await collectionModel.create({collection, createdAt, updatedAt, standard_quantity});
+        const collectioncred = await collectionModel.create({collection, standard_quantity});
 
         return res.status(200).send({collectioncred});
 
@@ -19,10 +19,10 @@ export async function createCollection(req: Request, res: Response) {
 export async function updateCollection(req: Request, res: Response) {
 	try {
         const {idcollection} = req.params;
-        const { collection, createdAt, updatedAt, standard_quantity } = matchedData(req);
+        const { collection, standard_quantity } = matchedData(req);
             
         const collectionUp = await collectionModel.update({
-            collection, createdAt, updatedAt, standard_quantity
+            collection, standard_quantity
         },{
             where: {id: idcollection}
         });

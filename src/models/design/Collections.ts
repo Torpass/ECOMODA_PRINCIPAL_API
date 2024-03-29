@@ -7,8 +7,9 @@ class CollectionModel extends Model<Collections> implements Collections {
     public id!: number;
     public collection!: string;
     public standard_quantity!: number;
-    public createdAt!: Date;
-    public updatedAt!: Date;
+
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 
     // Metodos personalizados
     
@@ -25,12 +26,6 @@ CollectionModel.init(
         },
         standard_quantity: {
             type: DataTypes.INTEGER,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
         },
     },
 
