@@ -12,6 +12,10 @@ export const garmentValidator = [
         .exists()
         .notEmpty().withMessage('Este campo no puede estar vacío')
         .isInt().withMessage('Debe ser un número entero'),
+    check('garment_type_id')
+        .exists()
+        .notEmpty().withMessage('Este campo no puede estar vacío')
+        .isInt().withMessage('Debe ser un número entero'),
     check('size_id')
         .exists()
         .notEmpty().withMessage('Este campo no puede estar vacío')

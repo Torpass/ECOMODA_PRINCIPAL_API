@@ -6,8 +6,9 @@ class GarmentModel extends Model<Garment> implements Garment {
     public id!: number;
     public garment!: string;
     public collection_id!: number;
+    public garment_type_id!: number;
     public size_id!: number;
-    public pattern!: Text;
+    public pattern!: string;
 }
 
 GarmentModel.init(
@@ -18,6 +19,9 @@ GarmentModel.init(
         },
         garment: {
             type: DataTypes.STRING,
+        },
+        garment_type_id: {
+            type: DataTypes.NUMBER,
         },
         collection_id: {
             type: DataTypes.NUMBER,
