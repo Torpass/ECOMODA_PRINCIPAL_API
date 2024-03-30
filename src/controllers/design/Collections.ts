@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
 import collectionModel from '../../models/design/Collections';
+import GarmentModel from '../../models/design/Garment';
+import GarmentImagenModel from '../../models/design/GarmentImg';
 
 export async function createCollection(req: Request, res: Response) {
 	try {
@@ -46,7 +48,17 @@ export async function getOneCollection(req: Request, res: Response) {
         const {idcollection} = req.params;
 
         const collection = await collectionModel.findOne({
+            include: [
+            { model: GarmentModel,
+            include: [
+                {
+                  model: GarmentImagenModel,
+                },
+              ],
+            },
+            ],
             where: {id: idcollection}
+            
         });
 
         if(!collection) return res.status(404).send('COLLECTION_NOT_FOUND');
@@ -62,7 +74,16 @@ export async function getOneCollection(req: Request, res: Response) {
 
 export async function getAllCollection(_req: Request, res: Response) {
 	try {
-        const collections = await collectionModel.findAll();
+        const collections = await collectionModel.findAll({
+            include: [
+                { model: GarmentModel,
+                    include: [
+                        {
+                          model: GarmentImagenModel,
+                        },
+                      ],}
+                ],
+            });
 
         return res.status(200).send({collections});
 

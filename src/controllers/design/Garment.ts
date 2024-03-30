@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
 import garmentModel from '../../models/design/Garment';
 import GarmentImagenModel from '../../models/design/GarmentImg';
+import GarmentTypeModel from '../../models/design/GarmentType';
 import CollectionModel from '../../models/design/Collections';
 import SizeModel from '../../models/design/Sizes';
 import '../../models/design/associations';
@@ -86,7 +87,9 @@ export async function getOneGarment(req: Request, res: Response) {
         const garment = await garmentModel.findOne({
             include: [
                 { model: CollectionModel},
-                { model: SizeModel}
+                { model: SizeModel},
+                { model: GarmentTypeModel},
+                { model: GarmentImagenModel}
               ],       
             where: {id: idgarment}
         });
@@ -107,9 +110,10 @@ export async function getAllGarments(_req: Request, res: Response) {
         const garments = await garmentModel.findAll({
             include: [
             { model: CollectionModel},
-            { model: SizeModel}
-/*             { model: GarmentImagenModel}
- */          ]});
+            { model: SizeModel},
+            { model: GarmentTypeModel},
+            { model: GarmentImagenModel} 
+            ]});
 
         return res.status(200).send({garments});
 

@@ -4,6 +4,8 @@ import SizeModel from "./Sizes";
 import GarmentsMaterialsModel from "./GarmentsMaterials";
 import MaterialModel from "./Materials";
 import GarmentImagenModel from "./GarmentImg";
+import GarmentTypeModel from "./GarmentType";
+
 
 module.exports = {
     GarmentModel,
@@ -11,7 +13,8 @@ module.exports = {
     SizeModel,
     GarmentsMaterialsModel,
     MaterialModel,
-    GarmentImagenModel
+    GarmentImagenModel,
+    GarmentTypeModel
 }
 
 GarmentsMaterialsModel.belongsTo(GarmentModel, { 
@@ -42,14 +45,28 @@ GarmentModel.belongsTo(SizeModel, {
     targetKey: 'id' 
 });
 
-GarmentImagenModel.belongsTo(GarmentModel, { 
-    foreignKey: 'id_garment'
-});
-
 CollectionModel.hasMany(GarmentModel, { 
     foreignKey: 'collection_id', 
 });
 
 SizeModel.hasMany(GarmentModel, { 
     foreignKey: 'size_id', 
+});
+
+GarmentImagenModel.belongsTo(GarmentModel, { 
+    foreignKey: 'garment_id', 
+    targetKey: 'id' 
+});
+
+GarmentModel.hasMany(GarmentImagenModel, { 
+    foreignKey: 'garment_id', 
+});
+
+GarmentModel.belongsTo(GarmentTypeModel, { 
+    foreignKey: 'garment_type_id', 
+    targetKey: 'id' 
+});
+
+GarmentTypeModel.hasMany(GarmentModel, { 
+    foreignKey: 'garment_type_id', 
 });
