@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `garments`;
 CREATE TABLE `garments` (
   `id` int NOT NULL AUTO_INCREMENT,
   `garment` varchar(256) DEFAULT NULL,
-  `pattern` int DEFAULT NULL,
+  `pattern` TEXT DEFAULT NULL,
   `garment_type_id` int DEFAULT NULL,
   `size_id` int DEFAULT NULL,
   `collection_id` int DEFAULT NULL,

@@ -8,37 +8,41 @@ import '../../models/design/associations';
 import { sequelize } from "../../config/db";
 
 export async function createGarment(req: Request, res: Response) {
-    try {
+  try {
+        if (!req.body.imagen) return res.status(400).send('ERROR_GETTING_IMAGES');
 
-            if (!req.body.imagen) return res.status(400).send('ERROR_GETTING_IMAGES');
+        const { garment, collection_id, garment_type_id, size_id } = matchedData(req);
+        
+        const filesObject = req.files as { [fieldname: string]: Express.Multer.File[] };
+        const patternPath = (filesObject['pattern'] && filesObject['pattern'][0]) ? filesObject['pattern'][0].path : '';
+        const pattern = patternPath;
 
-            const { garment, collection_id, garment_type_id, size_id } = matchedData(req);
-            const pattern = req.file ? req.file.path : '';
+        console.log(pattern)
 
-            const resultTransaction = await sequelize.transaction(async (t: any) => {
-                const garmentCreated = await garmentModel.create({
-                    garment,
-                    collection_id,
-                    size_id,
-                    garment_type_id,
-                    pattern
-                }, { transaction: t });
+        const resultTransaction = await sequelize.transaction(async (t: any) => {
+            const garmentCreated = await garmentModel.create({
+                garment,
+                collection_id,
+                size_id,
+                garment_type_id,
+                pattern
+            }, { transaction: t });
 
-                let imagenesReq = req.body.imagen.trim();
-                const imagenObject: Array<string> = imagenesReq.split(' ');
-                const imagenes = await imagenObject.map((imagen: string) => {
-                    return {
-                        garment_id: garmentCreated.id,
-                        URL: imagen
-                    }
-                });
-
-                await GarmentImagenModel.bulkCreate(imagenes, { transaction: t });
+            let imagenesReq = req.body.imagen.trim();
+            const imagenObject: Array<string> = imagenesReq.split(' ');
+            const imagenes = await imagenObject.map((imagen: string) => {
                 return {
-                    garmentCreated,
-                    imagenObject
-                };
+                    garment_id: garmentCreated.id,
+                    URL: imagen
+                }
             });
+
+            await GarmentImagenModel.bulkCreate(imagenes, { transaction: t });
+            return {
+                garmentCreated,
+                imagenObject
+            };
+        });
 
             return res.status(200).send({
                 garmentCreated: resultTransaction.garmentCreated,
@@ -104,7 +108,8 @@ export async function getAllGarments(_req: Request, res: Response) {
             include: [
             { model: CollectionModel},
             { model: SizeModel}
-          ]});
+/*             { model: GarmentImagenModel}
+ */          ]});
 
         return res.status(200).send({garments});
 

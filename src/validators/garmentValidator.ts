@@ -20,11 +20,6 @@ export const garmentValidator = [
         .exists()
         .notEmpty().withMessage('Este campo no puede estar vacío')
         .isInt().withMessage('Debe ser un número entero'),
-    check('pattern')
-        .exists()
-        .notEmpty().withMessage('Este campo no puede estar vacío')
-        .isString().withMessage('Debe ser una cadena de texto')
-        .isLength({ max: 500 }).withMessage('Debe contener un máximo de 500 caracteres'),
     (req: Request, res: Response, next: NextFunction) => {
         console.log(req.body)
         return validationResults(req, res, next);

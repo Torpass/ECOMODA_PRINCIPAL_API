@@ -9,10 +9,14 @@ type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
 const storage = diskStorage({
-    destination: function (req: Request, _file: Express.Multer.File, cb: DestinationCallback) {
-        const pathStorage = path.join(__dirname, '../../storage/garments/images');
-        console.log(pathStorage);
-        cb(null, pathStorage);
+    destination: function (_req: Request, file: Express.Multer.File, cb: DestinationCallback) {
+        if (file.fieldname === 'imagen') {
+            cb(null, path.join(__dirname, '../../storage/garments/images/'));
+        } else if (file.fieldname === 'pattern') {
+            cb(null, path.join(__dirname, '../../storage/garments/pattern/'));
+        } else {
+            const error = new Error('Nombre de campo no válido');
+            cb(error, '');        }
     },
     filename: function(req: Request, file: Express.Multer.File, cb: FileNameCallback) {
         const ext = file.originalname.split('.').pop();
@@ -23,6 +27,6 @@ const storage = diskStorage({
     }
 });
 
-const uploadImg = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
-export default uploadImg;
+export default upload;
