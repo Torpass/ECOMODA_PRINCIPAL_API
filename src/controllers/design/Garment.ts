@@ -13,12 +13,14 @@ export async function createGarment(req: Request, res: Response) {
         if (!req.body.imagen) return res.status(400).send('ERROR_GETTING_IMAGES');
 
         const { garment, collection_id, garment_type_id, size_id } = matchedData(req);
-        
-        const filesObject = req.files as { [fieldname: string]: Express.Multer.File[] };
-        const patternPath = (filesObject['pattern'] && filesObject['pattern'][0]) ? filesObject['pattern'][0].path : '';
-        const pattern = patternPath;
 
-        console.log(pattern)
+
+        let imagenesReq = req.body.imagen.trim();
+        const imagenObject: Array<string> = imagenesReq.split(' ');
+        
+        const primerValor = imagenObject.length > 0 ? imagenObject[0] : '';
+        const pattern: string = typeof primerValor !== 'undefined' ? primerValor : '';
+
 
         const resultTransaction = await sequelize.transaction(async (t: any) => {
             const garmentCreated = await garmentModel.create({
@@ -29,12 +31,10 @@ export async function createGarment(req: Request, res: Response) {
                 pattern
             }, { transaction: t });
 
-            let imagenesReq = req.body.imagen.trim();
-            const imagenObject: Array<string> = imagenesReq.split(' ');
             const imagenes = await imagenObject.map((imagen: string) => {
                 return {
-                    garment_id: garmentCreated.id,
-                    URL: imagen
+                    garment_id: garmentCreated.id, //No se ve id
+                    URL: imagen 
                 }
             });
 
@@ -44,7 +44,7 @@ export async function createGarment(req: Request, res: Response) {
                 imagenObject
             };
         });
-
+        
             return res.status(200).send({
                 garmentCreated: resultTransaction.garmentCreated,
                 garmentImagenes: resultTransaction.imagenObject
