@@ -16,6 +16,7 @@ GarmentModel.init(
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            autoIncrement: true
         },
         garment: {
             type: DataTypes.STRING,

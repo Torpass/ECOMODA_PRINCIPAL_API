@@ -20,8 +20,7 @@ export async function createGarment(req: Request, res: Response) {
         
         const primerValor = imagenObject.length > 0 ? imagenObject[0] : '';
         const pattern: string = typeof primerValor !== 'undefined' ? primerValor : '';
-
-
+        
         const resultTransaction = await sequelize.transaction(async (t: any) => {
             const garmentCreated = await garmentModel.create({
                 garment,
