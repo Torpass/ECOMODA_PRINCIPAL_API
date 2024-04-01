@@ -32,7 +32,7 @@ export async function createGarment(req: Request, res: Response) {
 
             const imagenes = await imagenObject.map((imagen: string) => {
                 return {
-                    garment_id: garmentCreated.id, //No se ve id
+                    garment_id: garmentCreated.id,
                     URL: imagen 
                 }
             });
