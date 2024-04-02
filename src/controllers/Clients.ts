@@ -21,12 +21,12 @@ export async function createclient(req: Request, res: Response) {
 export async function updateclient(req: Request, res: Response) {
 	try {
         const cedula = req.params['cedula'];
-        const name = matchedData(req);
+        const {name} = matchedData(req);
             
         const posup = await ClientModel.update({
-            name
+            name:name
         },{
-            where: {cedula: cedula} 
+            where: {cedula} 
         });
 
         const posupted = await ClientModel.findOne({where: {cedula: cedula}})
