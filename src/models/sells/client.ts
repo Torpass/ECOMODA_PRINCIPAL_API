@@ -1,6 +1,6 @@
 import {Model, DataTypes} from 'sequelize'
 import { sequelize } from '../../config/db';
-import Client from './interfaces/Clients';
+import Client from '../interfaces/Clients';
 
 
 class ClientModel extends Model<Client> implements Client {
@@ -13,16 +13,13 @@ class ClientModel extends Model<Client> implements Client {
 
 ClientModel.init(
     {
-        store_id: {
+        cedula: {
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
-        product_id: {
+        name: {
             type: DataTypes.STRING,
-        },
-        quantity: {
-            type: DataTypes.STRING,
-        },
+        }
     },
 
     {
