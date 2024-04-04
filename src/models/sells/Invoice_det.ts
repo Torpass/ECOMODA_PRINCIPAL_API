@@ -1,12 +1,12 @@
 import {Model, DataTypes} from 'sequelize'
 import { sequelize } from '../../config/db';
-import Factura_det from '../interfaces/Factura_det';
+import Factura_det from '../interfaces/Invoice_det';
 
 
 class Factura_det_Model extends Model<Factura_det> implements Factura_det {
 
-    product_ID!: number;
-    venta_cab!: number;
+    inventory_id!: number;
+    invoice_id!: number;
     quantity!: number;
     price!: number;
     discount!: number;
@@ -17,11 +17,11 @@ class Factura_det_Model extends Model<Factura_det> implements Factura_det {
 
 Factura_det_Model.init(
     {
-        product_ID: {
+        inventory_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
-        venta_cab: {
+        invoice_id: {
             type: DataTypes.INTEGER,
         },
         quantity: {

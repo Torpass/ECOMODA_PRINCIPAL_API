@@ -1,6 +1,6 @@
 export default interface Factura_det {
-    product_ID: number;
-    venta_cab: number;
+    inventory_id: number;
+    invoice_id: number;
     quantity: number;
     price: number;
     discount: number;
