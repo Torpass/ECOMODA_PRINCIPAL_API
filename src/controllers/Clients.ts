@@ -5,11 +5,11 @@ import ClientModel from '../models/sells/client';
 
 export async function createclient(req: Request, res: Response) {
 	try {
-        const {cedula} = matchedData(req);
+        const {id} = matchedData(req);
         const {name} = matchedData(req)
-        console.log(cedula);
+        console.log(id);
         // const storecred = await InventoryModel.create({name});
-        const client_cred = await ClientModel.create({cedula, name})
+        const client_cred = await ClientModel.create({id, name})
         return res.status(200).send({client_cred});
 
 	} catch (error: any) {
@@ -20,16 +20,16 @@ export async function createclient(req: Request, res: Response) {
 
 export async function updateclient(req: Request, res: Response) {
 	try {
-        const cedula = req.params['cedula'];
+        const id = req.params['id'];
         const {name} = matchedData(req);
             
         const posup = await ClientModel.update({
             name:name
         },{
-            where: {cedula} 
+            where: {id} 
         });
 
-        const posupted = await ClientModel.findOne({where: {cedula: cedula}})
+        const posupted = await ClientModel.findOne({where: {id: id}})
 
 
 
@@ -45,10 +45,10 @@ export async function updateclient(req: Request, res: Response) {
 
 export async function getoneclient(req: Request, res: Response) {
 	try {
-        const cedula = req.params['cedula'];
+        const id = req.params['id'];
         // const name = req.params['nombre'];
         const client = await ClientModel.findOne({
-            where: {cedula:cedula}
+            where: {id:id}
         });
 
         if(!client) return res.status(404).send('client_NOT_FOUND');
@@ -76,12 +76,12 @@ export async function getAllClients(_req: Request, res: Response) {
 
 export async function deleteclient(req: Request, res : Response) {
     try{
-        const cedula = req.params['cedula'];
+        const id = req.params['id'];
         const name = req.params['name'];
         
         await ClientModel.destroy({
             where: {
-              cedula: cedula,
+              id: id,
               name: name
             },
           });

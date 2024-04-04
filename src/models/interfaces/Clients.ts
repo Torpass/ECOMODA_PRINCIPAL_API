@@ -1,4 +1,4 @@
 export default interface Client {
-    cedula: number;
+    id: number;
     name: string;
 }
