@@ -7,16 +7,16 @@ router.post('/createclient',
             createclient
 );
 
-router.put('/updatestore/:cedula',
+router.put('/updatestore/:id',
            
     updateclient
 );
 
-router.get('/getoneclient/:cedula', getoneclient);
+router.get('/getoneclient/:id', getoneclient);
 
 router.get('/getAllClients', getAllClients);
 
-router.delete('/deleteclient/:cedula',
+router.delete('/deleteclient/:id',
     deleteclient
 );
 module.exports = router;

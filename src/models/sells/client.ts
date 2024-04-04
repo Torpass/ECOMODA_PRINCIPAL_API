@@ -4,7 +4,7 @@ import Client from '../interfaces/Clients';
 
 
 class ClientModel extends Model<Client> implements Client {
-    cedula!: number;
+    id!: number;
     name!: string;
 
     // Metodos personalizados
@@ -13,7 +13,7 @@ class ClientModel extends Model<Client> implements Client {
 
 ClientModel.init(
     {
-        cedula: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
