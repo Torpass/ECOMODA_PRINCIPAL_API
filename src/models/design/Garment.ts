@@ -21,10 +21,10 @@ GarmentModel.init(
         garment: {
             type: DataTypes.STRING,
         },
-        garment_type_id: {
+        collection_id: {
             type: DataTypes.NUMBER,
         },
-        collection_id: {
+        garment_type_id: {
             type: DataTypes.NUMBER,
         },
         size_id: {

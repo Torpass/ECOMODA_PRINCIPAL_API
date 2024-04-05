@@ -14,69 +14,77 @@ export async function createGarment(req: Request, res: Response) {
 
         const { garment, collection_id, garment_type_id, size_id } = matchedData(req);
 
-
-        let imagenesReq = req.body.imagen.trim();
-        const imagenObject: Array<string> = imagenesReq.split(' ');
+        const numericCollectionId = parseInt(collection_id);
+        const numericGarmentTypeId = parseInt(garment_type_id);
+        const numericSizeId = parseInt(size_id);
+        let imagenesReq = req.body.imagen;
         
-        const primerValor = imagenObject.length > 0 ? imagenObject[0] : '';
-        const pattern: string = typeof primerValor !== 'undefined' ? primerValor : '';
+        const imagenesArray = imagenesReq.split(' ');
+        const pattern: string = imagenesArray.length > 0 ? imagenesArray[imagenesArray.length - 1].trim() : '';
+        
         
         const resultTransaction = await sequelize.transaction(async (t: any) => {
             const garmentCreated = await garmentModel.create({
                 garment,
-                collection_id,
-                size_id,
-                garment_type_id,
+                collection_id: numericCollectionId,
+                size_id: numericSizeId,
+                garment_type_id: numericGarmentTypeId,
                 pattern
             }, { transaction: t });
 
-            const imagenes = await imagenObject.map((imagen: string) => {
+            const imagenes = imagenesReq.split(' ').map((imagen: string) => {
                 return {
                     garment_id: garmentCreated.id,
-                    URL: imagen 
-                }
+                    URL: imagen.trim() 
+                };
             });
+        
 
             await GarmentImagenModel.bulkCreate(imagenes, { transaction: t });
             return {
                 garmentCreated,
-                imagenObject
+                imagenesReq
             };
         });
         
             return res.status(200).send({
                 garmentCreated: resultTransaction.garmentCreated,
-                garmentImagenes: resultTransaction.imagenObject
+                garmentImagenes: resultTransaction.imagenesReq
             });
     } catch (err: any) {
+        throw err;
         console.log(err);
         return res.status(500).send('Error al crear la prenda');
     }
 }
 
 export async function updateGarment(req: Request, res: Response) {
-	try {
-        const {idgarment} = req.params;
-        const { garment, collection_id, size_id, pattern } = matchedData(req);
-            
-        const garmentUp = await garmentModel.update({
-            garment, collection_id, size_id, pattern
-        },{
-            where: {id: idgarment}
+    try {
+        const { idgarment } = req.params;
+        const { garment, collection_id, size_id, garment_type_id } = matchedData(req);
+
+        const existingGarment = await garmentModel.findOne({ where: { id: idgarment } });
+        if (!existingGarment) {
+            return res.status(404).send('Garment_Not_Found');
+        }
+
+        const updatedGarment = await garmentModel.update({
+            garment, collection_id, size_id, garment_type_id
+        }, {
+            where: { id: idgarment }
         });
 
-        const garmentUpted = await garmentModel.findOne({where: {id: idgarment}})
+        if (updatedGarment[0] === 0) {
+            return res.status(500).send('Failed to update garment');
+        }
 
+        const garmentUpdated = await garmentModel.findOne({ where: { id: idgarment } });
 
-
-        if(!garmentUpted) return res.status(404).send('Garment_Not_Found')
-
-        return res.status(200).send({garmentUpted, garmentUp})
-
-	} catch (error: any) {
-		console.log(error);
-		return res.status(500).send('ERROR_GETTING_GARMENT');
-	}
+        return res.status(200).send({ garmentUpdated });
+    } catch (error: any) {
+        console.log(error);
+        return res.status(500).send('ERROR_GETTING_GARMENT');
+    }
 }
 
 export async function getOneGarment(req: Request, res: Response) {
