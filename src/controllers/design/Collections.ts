@@ -3,6 +3,7 @@ import { matchedData } from 'express-validator';
 import collectionModel from '../../models/design/Collections';
 import GarmentModel from '../../models/design/Garment';
 import GarmentImagenModel from '../../models/design/GarmentImg';
+import MaterialModel from '../../models/design/Materials';
 
 export async function createCollection(req: Request, res: Response) {
 	try {
@@ -92,6 +93,47 @@ export async function getAllCollection(_req: Request, res: Response) {
 		return res.status(500).send('ERROR_GETTING_COLLECTIONS');
 	}
 }
+
+export async function getLastCollectionGarments(_req: Request, res: Response) {
+	try {
+        const collections = await collectionModel.findAll({
+            order: [['id', 'DESC']],
+            limit: 3,
+          });
+
+        const garments = await GarmentModel.findAll({
+            order: [['id', 'DESC']],
+            limit: 3,
+        });
+        const materials = await MaterialModel.findAll({
+          order: [['id', 'DESC']],
+          limit: 3,
+        });
+
+        return res.status(200).send({collections, garments, materials});
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETTING_LAST_COLLECTIONS_AND_GARMENTS');
+	}
+}
+
+export async function getCounts(_req: Request, res: Response) {
+	try {
+    const Colecciones = await collectionModel.count();
+    const Prendas = await GarmentModel.count();
+    const Materiales = await MaterialModel.count();
+
+        return res.status(200).send({Colecciones, Prendas, Materiales});
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETTING_COUNTS');
+	}
+}
+
+
+
 
 export async function deleteCollection(req: Request, res : Response) {
     try{

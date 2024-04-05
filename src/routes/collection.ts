@@ -1,5 +1,5 @@
 import express from 'express';
-import {createCollection, updateCollection, getOneCollection, getAllCollection, deleteCollection} from '../controllers/design/Collections';
+import {createCollection, updateCollection, getOneCollection, getAllCollection, deleteCollection, getCounts, getLastCollectionGarments} from '../controllers/design/Collections';
 import { collectionValidator } from '../validators/collectionValidator';
 const router = express.Router();
 
@@ -20,4 +20,9 @@ router.get('/getallcollection', getAllCollection);
 router.delete('/deletecollection/:idcollection',
             deleteCollection
 );
+
+router.get('/getlastcollectiongarments', getLastCollectionGarments);
+
+router.get('/getcounts', getCounts);
+
 module.exports = router;
