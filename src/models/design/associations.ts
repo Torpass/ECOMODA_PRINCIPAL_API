@@ -24,11 +24,13 @@ GarmentsMaterialsModel.belongsTo(GarmentModel, {
 
 GarmentsMaterialsModel.belongsTo(MaterialModel, { 
     foreignKey: 'material_id', 
-    targetKey: 'id' 
+    targetKey: 'id',
+    onDelete: 'CASCADE'
 });
 
 GarmentModel.hasMany(GarmentsMaterialsModel, { 
-    foreignKey: 'garment_id', 
+    foreignKey: 'garment_id',
+    
 });
 
 MaterialModel.hasMany(GarmentsMaterialsModel, { 
@@ -55,16 +57,18 @@ SizeModel.hasMany(GarmentModel, {
 
 GarmentImagenModel.belongsTo(GarmentModel, { 
     foreignKey: 'garment_id', 
-    targetKey: 'id' 
+    targetKey: 'id'
 });
 
 GarmentModel.hasMany(GarmentImagenModel, { 
-    foreignKey: 'garment_id', 
+    foreignKey: 'garment_id',
+    onDelete: 'CASCADE',
+    hooks: true 
 });
 
 GarmentModel.belongsTo(GarmentTypeModel, { 
     foreignKey: 'garment_type_id', 
-    targetKey: 'id' 
+    targetKey: 'id'
 });
 
 GarmentTypeModel.hasMany(GarmentModel, { 

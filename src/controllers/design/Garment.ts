@@ -122,18 +122,21 @@ export async function getAllGarments(_req: Request, res: Response) {
 	}
 }
 
-export async function deleteGarment(req: Request, res : Response) {
-    try{
-        const {idgarment} = req.params;
-        
-        await garmentModel.destroy({
-            where: {
-              id: idgarment
-            },
-          });
-        return res.status(200).send('GARMENT_DELETED');
-    }catch(error: any){
-        console.log(error);
-        return res.status(500).send('ERROR_DELETING_GARMENT');
+export async function deleteGarment(req: Request, res: Response) {
+    try {
+      const { idgarment } = req.params;
+  
+      await garmentModel.destroy({
+        where: {
+          id: idgarment,
+        },
+        cascade: true,
+      });
+  
+      return res.status(200).send('GARMENT_DELETED');
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).send('ERROR_DELETING_GARMENT');
     }
-}
+  }
+  
