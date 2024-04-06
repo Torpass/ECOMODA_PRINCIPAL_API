@@ -7,6 +7,7 @@ import CollectionModel from '../../models/design/Collections';
 import SizeModel from '../../models/design/Sizes';
 import '../../models/design/associations';
 import { sequelize } from "../../config/db";
+import GarmentsMaterialsModel from '../../models/design/GarmentsMaterials';
 
 export async function createGarment(req: Request, res: Response) {
   try {
@@ -57,10 +58,10 @@ export async function createGarment(req: Request, res: Response) {
 export async function updateGarment(req: Request, res: Response) {
 	try {
         const {idgarment} = req.params;
-        const { garment, collection_id, size_id, pattern } = matchedData(req);
+        const { garment, collection_id, size_id, pattern, garment_type_id } = matchedData(req);
             
         const garmentUp = await garmentModel.update({
-            garment, collection_id, size_id, pattern
+            garment, collection_id, size_id, pattern, garment_type_id
         },{
             where: {id: idgarment}
         });
@@ -90,7 +91,7 @@ export async function getOneGarment(req: Request, res: Response) {
                 { model: GarmentTypeModel},
                 { model: GarmentImagenModel}
               ],       
-            where: {id: idgarment}
+            where: {id: idgarment, activo:1}
         });
 
         if(!garment) return res.status(404).send('GARMENT_NOT_FOUND');
@@ -112,7 +113,8 @@ export async function getAllGarments(_req: Request, res: Response) {
             { model: SizeModel},
             { model: GarmentTypeModel},
             { model: GarmentImagenModel} 
-            ]});
+            ],
+            where: {activo:1}});
 
         return res.status(200).send({garments});
 
@@ -122,21 +124,33 @@ export async function getAllGarments(_req: Request, res: Response) {
 	}
 }
 
-export async function deleteGarment(req: Request, res: Response) {
-    try {
-      const { idgarment } = req.params;
-  
-      await garmentModel.destroy({
-        where: {
-          id: idgarment,
-        },
-        cascade: true,
-      });
-  
-      return res.status(200).send('GARMENT_DELETED');
-    } catch (error: any) {
-      console.log(error);
-      return res.status(500).send('ERROR_DELETING_GARMENT');
-    }
-  }
-  
+  export async function deleteGarment(req: Request, res: Response) {
+	try {
+        const {idgarment} = req.params;
+            
+        await garmentModel.update(
+            { activo: false },
+            { where: { id: idgarment } }
+          );
+          await GarmentImagenModel.update(
+            { garment_id: null as any},
+            { where: { garment_id: idgarment } }
+          );
+          await GarmentsMaterialsModel.update(
+            { garment_id: null as any}, 
+            { where: { garment_id: idgarment } }
+          );
+        
+
+        const garmentDeleted = await garmentModel.findOne({where: {id: idgarment}})
+
+        if(!garmentDeleted) return res.status(404).send('Garment_Not_Found')
+
+        return res.status(200).send({garmentDeleted})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_DELETING_GARMENT');
+	}
+}
+

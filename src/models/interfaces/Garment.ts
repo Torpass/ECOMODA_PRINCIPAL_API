@@ -5,4 +5,5 @@ export default interface Garment {
     collection_id: number;
     size_id: number;
     pattern: string;
+    activo?: boolean;
 }
