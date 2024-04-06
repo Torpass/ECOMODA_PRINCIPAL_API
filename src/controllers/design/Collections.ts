@@ -48,7 +48,7 @@ export async function getOneCollection(req: Request, res: Response) {
 	try {
         const {idcollection} = req.params;
 
-        const collection = await collectionModel.findOne({
+        const collections = await collectionModel.findOne({
             include: [
             { model: GarmentModel,
             include: [
@@ -62,10 +62,10 @@ export async function getOneCollection(req: Request, res: Response) {
             
         });
 
-        if(!collection) return res.status(404).send('COLLECTION_NOT_FOUND');
+        if(!collections) return res.status(404).send('COLLECTION_NOT_FOUND');
 
 
-        return res.status(200).send({collection});
+        return res.status(200).send({collections});
 
 	} catch (error: any) {
 		console.log(error);
