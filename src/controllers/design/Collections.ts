@@ -4,6 +4,8 @@ import collectionModel from '../../models/design/Collections';
 import GarmentModel from '../../models/design/Garment';
 import GarmentImagenModel from '../../models/design/GarmentImg';
 import MaterialModel from '../../models/design/Materials';
+import SizeModel from '../../models/design/Sizes';
+import GarmentTypeModel from '../../models/design/GarmentType';
 
 export async function createCollection(req: Request, res: Response) {
 	try {
@@ -54,6 +56,12 @@ export async function getOneCollection(req: Request, res: Response) {
             include: [
                 {
                   model: GarmentImagenModel,
+                },
+                {
+                  model: SizeModel
+                },
+                {
+                  model: GarmentTypeModel
                 },
               ],
             },

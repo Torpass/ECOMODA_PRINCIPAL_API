@@ -23,7 +23,7 @@ router.get('/getonegarment/:idgarment', getOneGarment);
 
 router.get('/getallgarments', getAllGarments);
 
-router.delete('/deletegarment/:idgarment',
+router.put('/deletegarment/:idgarment',
             deleteGarment
 );
 module.exports = router;

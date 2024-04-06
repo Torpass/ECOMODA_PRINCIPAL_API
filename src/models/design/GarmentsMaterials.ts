@@ -17,6 +17,7 @@ GarmentsMaterialsModel.init(
         },
         garment_id: {
             type: DataTypes.INTEGER,
+            allowNull: true
         },
         material_id: {
             type: DataTypes.INTEGER,

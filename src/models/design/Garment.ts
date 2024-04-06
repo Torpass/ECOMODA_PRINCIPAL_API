@@ -9,6 +9,7 @@ class GarmentModel extends Model<Garment> implements Garment {
     public garment_type_id!: number;
     public size_id!: number;
     public pattern!: string;
+    public activo!: boolean;
 }
 
 GarmentModel.init(
@@ -32,6 +33,9 @@ GarmentModel.init(
         },
         pattern: {
             type: DataTypes.TEXT,
+        },
+        activo:{
+            type: DataTypes.BOOLEAN,
         }
     },
     {

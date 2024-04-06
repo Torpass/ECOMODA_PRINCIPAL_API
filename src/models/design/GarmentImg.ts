@@ -17,6 +17,7 @@ GarmentImagenModel.init(
         },
         garment_id: {
             type: DataTypes.INTEGER,
+            allowNull: true,
         },
         URL: {
             type: DataTypes.STRING,
