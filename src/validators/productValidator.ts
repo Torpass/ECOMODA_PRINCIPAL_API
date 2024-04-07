@@ -3,7 +3,7 @@ import {check} from 'express-validator';
 // import validationResults from '../utils/handleValidations';
 
 const ValidatorRegisterProduct = [
-    check('id')
+    check('name')
     .exists()
     .notEmpty()
     .isLength({ min: 3, max: 45 }),
