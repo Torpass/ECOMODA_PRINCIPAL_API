@@ -52,7 +52,7 @@ export async function getOneCollection(req: Request, res: Response) {
 
         const collection = await collectionModel.findOne({
             include: [
-            { model: GarmentModel,
+            { model: GarmentModel, where: {activo: true},
             include: [
                 {
                   model: GarmentImagenModel,
@@ -85,7 +85,7 @@ export async function getAllCollection(_req: Request, res: Response) {
 	try {
         const collections = await collectionModel.findAll({
             include: [
-                { model: GarmentModel,
+                { model: GarmentModel, where: {activo: true},
                     include: [
                         {
                           model: GarmentImagenModel,
