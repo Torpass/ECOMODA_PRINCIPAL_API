@@ -62,10 +62,10 @@ export async function createGarment(req: Request, res: Response) {
 export async function updateGarment(req: Request, res: Response) {
 	try {
         const {idgarment} = req.params;
-        const { garment, collection_id, size_id, pattern, garment_type_id } = matchedData(req);
+        const { garment, collection_id, size_id, garment_type_id } = matchedData(req);
             
         const garmentUp = await garmentModel.update({
-            garment, collection_id, size_id, pattern, garment_type_id
+            garment, collection_id, size_id, garment_type_id
         },{
             where: {id: idgarment}
         });
