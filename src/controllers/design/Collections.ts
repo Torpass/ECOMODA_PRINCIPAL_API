@@ -52,7 +52,7 @@ export async function getOneCollection(req: Request, res: Response) {
 
         const collections = await collectionModel.findOne({
             include: [
-            { model: GarmentModel, where: {activo: true},
+            { model: GarmentModel, required: false, where: {activo: true},
             include: [
                 {
                   model: GarmentImagenModel,
