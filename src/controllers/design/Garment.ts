@@ -88,7 +88,7 @@ export async function getOneGarment(req: Request, res: Response) {
 	try {
         const {idgarment} = req.params;
 
-        const garment = await garmentModel.findOne({
+        const garments = await garmentModel.findOne({
             include: [
                 { model: CollectionModel},
                 { model: SizeModel},
@@ -98,10 +98,10 @@ export async function getOneGarment(req: Request, res: Response) {
             where: {id: idgarment, activo:1}
         });
 
-        if(!garment) return res.status(404).send('GARMENT_NOT_FOUND');
+        if(!garments) return res.status(404).send('GARMENT_NOT_FOUND');
 
 
-        return res.status(200).send({garment});
+        return res.status(200).send({garments});
 
 	} catch (error: any) {
 		console.log(error);

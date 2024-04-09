@@ -6,17 +6,21 @@ import GarmentModel from '../../models/design/Garment';
 import MaterialModel from '../../models/design/Materials';
 
 export async function createGarmentsMaterials(req: Request, res: Response) {
-	try {
-        const { garment_id, material_id, quantity} = matchedData(req);
+    try {
+        const { garmentsMaterials } = req.body; 
+        console.log(garmentsMaterials);
 
-        const garmentsmaterialscred = await GarmentsMaterialsModel.create({garment_id, material_id, quantity});
+        const createdGarmentsMaterials = await Promise.all(garmentsMaterials.map(async (item: any) => {
+            const { garment_id, material_id, quantity } = item;
 
-        return res.status(200).send({garmentsmaterialscred});
+            return await GarmentsMaterialsModel.create({ garment_id, material_id, quantity });
+        }));
 
-	} catch (error: any) {
-		console.log(error);
-		return res.status(500).send('ERROR_CREATING_GARMENTS_MATERIALS');
-	}
+        return res.status(200).send({ createdGarmentsMaterials });
+    } catch (error: any) {
+        console.log(error);
+        return res.status(500).send('ERROR_CREATING_GARMENTS_MATERIALS');
+    }
 }
 
 export async function updateGarmentsMaterials(req: Request, res: Response) {
