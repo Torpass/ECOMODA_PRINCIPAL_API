@@ -73,20 +73,26 @@ export async function getOneGarmentsMaterials(req: Request, res: Response) {
 
 export async function getUnusedGarmentsMaterials(req: Request, res: Response) {
 	try {
-        const {idgarmentsmaterials} = req.params;
+        const { idgarmentsmaterials } = req.params;
 
-        const garmentsmaterials = await GarmentsMaterialsModel.findAll({
-            include: [
-                { model: GarmentModel, where: {activo: true}}, 
-                { model: MaterialModel}
-              ],   
-            where: {garment_id: {[Op.ne]: idgarmentsmaterials}}
+        // Primero, obtenemos todos los ids de los materiales que ya están asignados al garment_id en la tabla GarmentMaterials
+        const usedMaterials = await GarmentsMaterialsModel.findAll({
+            attributes: ['material_id'],
+            where: { garment_id: idgarmentsmaterials },
+            raw: true
         });
 
-        if(garmentsmaterials.length === 0) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
+        // Extraemos solo los ids de los materiales usados
+        const usedMaterialIds = usedMaterials.map(material => material.material_id);
 
+        // Luego, buscamos en la tabla Materials aquellos que no están en la lista de usados
+        const unusedMaterials = await MaterialModel.findAll({
+            where: { id: { [Op.notIn]: usedMaterialIds } }
+        });
 
-        return res.status(200).send({garmentsmaterials});
+        if(unusedMaterials.length === 0) return res.status(404).send('MATERIALS_NOT_FOUND');
+
+        return res.status(200).send({unusedMaterials});
 
 	} catch (error: any) {
 		console.log(error);
