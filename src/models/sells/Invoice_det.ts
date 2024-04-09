@@ -38,7 +38,7 @@ Factura_det_Model.init(
 
     {
         sequelize,
-        tableName: "factura_detalle",
+        tableName: "invoices_details",
         timestamps: false,
     }
 );
