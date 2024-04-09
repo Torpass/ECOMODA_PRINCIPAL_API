@@ -7,7 +7,7 @@ router.post('/createclient',
             createclient
 );
 
-router.put('/updatestore/:id',
+router.put('/updateclient/:id',
            
     updateclient
 );

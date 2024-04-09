@@ -14,7 +14,7 @@ export async function createclient(req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_CREATING_CLIENT');
+		return res.status(500).send('ERROR_CREATING_COSTUMERS');
 	}
 }
 
@@ -39,7 +39,7 @@ export async function updateclient(req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETTING_CLIENT');
+		return res.status(500).send('ERROR_GETTING_COSTUMER');
 	}
 }
 
@@ -58,7 +58,7 @@ export async function getoneclient(req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETTING_CLIENTS');
+		return res.status(500).send('ERROR_GETTING_COSTUMERS');
 	}
 }
 
@@ -70,7 +70,7 @@ export async function getAllClients(_req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETTING_CLIENTS');
+		return res.status(500).send('ERROR_GETTING_COSTUMERS');
 	}
 }
 
@@ -85,10 +85,10 @@ export async function deleteclient(req: Request, res : Response) {
               name: name
             },
           });
-        return res.status(500).send('CLIENT_DELETED');
+        return res.status(500).send('COSTUMER_DELETED');
     }catch(error: any){
         console.log(error);
-        return res.status(500).send('ERROR_DELETING_CLIENT');
+        return res.status(500).send('ERROR_DELETING_COSTUMER');
     }
     
 }

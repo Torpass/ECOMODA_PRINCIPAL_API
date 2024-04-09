@@ -24,7 +24,7 @@ ClientModel.init(
 
     {
         sequelize,
-        tableName: "inventories",
+        tableName: "customers",
         timestamps: false,
     }
 );
