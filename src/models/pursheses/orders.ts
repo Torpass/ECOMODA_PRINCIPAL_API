@@ -6,7 +6,7 @@ import Ordersinterface from '../interfaces/orders';
 class Ordersmodels extends Model<Ordersinterface> implements Ordersinterface{
     public id_orden!: number;
     public fecha_orden!: string;
-    public unidad_de_medida!: Enumerator;
+    public unidad_de_medida!: string;
     public cantidad!: string;
     
 
@@ -22,19 +22,15 @@ Ordersmodels.init(
             autoIncrement: true,
         },
         fecha_orden: {
-            type: DataTypes.DATETIME,
+            type: DataTypes.DATE,
         },
         unidad_de_medida: {
-            type: DataTypes.STRING,
+            type: DataTypes.ENUM('kg', 'lt', 'un')
         },
         cantidad: {
             type: DataTypes.DECIMAL(10,0),
         },
-        suplier_id: {
-            type: DataTypes.STRING,
-        
-    },},
-
+    },
     {
         sequelize,
         tableName: "orders",

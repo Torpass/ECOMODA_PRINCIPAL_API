@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
-import SupplierModel from '../models/pursheses/suppliers';
+import orderModel from '../models/pursheses/orders';
 
 export async function createorder(req: Request, res: Response) {
 	try {
-        const {fecha_orden, unidad_de_medida, cantidad} = matchedData(req);
+        const {unidad_de_medida, cantidad} = matchedData(req);
 
-        const ordercreated = await SupplierModel.create({
-            fecha_orden,
+        const ordercreated = await orderModel.create({
             unidad_de_medida,
             cantidad,
         });
@@ -22,7 +21,7 @@ export async function createorder(req: Request, res: Response) {
 
 export async function getallorders(_req: Request, res: Response) {
 	try {
-        const orders = await SupplierModel.findAll();
+        const orders = await orderModel.findAll();
 
         return res.status(200).send({orders});
 
@@ -36,8 +35,8 @@ export async function getallordersByid(req: Request, res: Response) {
 	try {
         const {idorder} = req.params;
 
-        const order = await SupplierModel.findOne({
-            where: {id: idorder}
+        const order = await orderModel.findOne({
+            where: {id_orden: idorder}
         });
 
         if(!order) return res.status(404).send('ORDER_NOT_FOUND');
@@ -56,15 +55,15 @@ export async function updateorder(req: Request, res: Response) {
         const {idorder} = req.params;
         const {fecha_orden, unidad_de_medida, cantidad} = matchedData(req);
             
-        const orderupdate = await SupplierModel.update({
+        const orderupdate = await orderModel.update({
             fecha_orden,
             unidad_de_medida,
             cantidad,
         },{
-            where: {id: idorder}
+            where: {id_orden: idorder}
         });
 
-        const orderupdated = await SupplierModel.findOne({where: {id: idorder}})
+        const orderupdated = await orderModel.findOne({where: {id_orden: idorder}})
 
 
 
