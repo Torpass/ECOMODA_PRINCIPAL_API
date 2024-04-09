@@ -4,6 +4,7 @@ import GarmentsMaterialsModel from '../../models/design/GarmentsMaterials';
 import '../../models/design/associations';
 import GarmentModel from '../../models/design/Garment';
 import MaterialModel from '../../models/design/Materials';
+import { Op } from 'sequelize';
 
 export async function createGarmentsMaterials(req: Request, res: Response) {
     try {
@@ -52,15 +53,37 @@ export async function getOneGarmentsMaterials(req: Request, res: Response) {
 	try {
         const {idgarmentsmaterials} = req.params;
 
-        const garmentsmaterials = await GarmentsMaterialsModel.findOne({
+        const garmentsmaterials = await GarmentsMaterialsModel.findAll({
             include: [
-                { model: GarmentModel},
+                { model: GarmentModel, where: {activo: true}}, 
                 { model: MaterialModel}
               ],   
-            where: {id: idgarmentsmaterials}
+            where: {garment_id: idgarmentsmaterials}
         });
 
-        if(!garmentsmaterials) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
+        if(garmentsmaterials.length === 0) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
+
+        return res.status(200).send({garmentsmaterials});
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETTING_GARMENTS_MATERIALS');
+	}
+}
+
+export async function getUnusedGarmentsMaterials(req: Request, res: Response) {
+	try {
+        const {idgarmentsmaterials} = req.params;
+
+        const garmentsmaterials = await GarmentsMaterialsModel.findAll({
+            include: [
+                { model: GarmentModel, where: {activo: true}}, 
+                { model: MaterialModel}
+              ],   
+            where: {garment_id: {[Op.ne]: idgarmentsmaterials}}
+        });
+
+        if(garmentsmaterials.length === 0) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
 
 
         return res.status(200).send({garmentsmaterials});
@@ -75,7 +98,7 @@ export async function getAllGarmentsMaterials(_req: Request, res: Response) {
 	try {
         const garmentsmaterials = await GarmentsMaterialsModel.findAll({
             include: [
-                { model: GarmentModel},
+                { model: GarmentModel, where: {activo: true}},
                 { model: MaterialModel}
               ]
             });

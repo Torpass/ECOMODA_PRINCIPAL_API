@@ -1,5 +1,5 @@
 import express from 'express';
-import {createGarmentsMaterials, updateGarmentsMaterials, getOneGarmentsMaterials, getAllGarmentsMaterials, deleteGarmentsMaterials} from '../controllers/design/GarmentsMaterials';
+import {createGarmentsMaterials, updateGarmentsMaterials, getOneGarmentsMaterials, getUnusedGarmentsMaterials, getAllGarmentsMaterials, deleteGarmentsMaterials} from '../controllers/design/GarmentsMaterials';
 import { GarmentsMaterialsValidator } from '../validators/garmentsMaterialsValidator';
 const router = express.Router();
 
@@ -14,6 +14,8 @@ router.put('/updategarmentsmaterials/:idgarmentsmaterials',
 );
 
 router.get('/getonegarmentsmaterials/:idgarmentsmaterials', getOneGarmentsMaterials);
+
+router.get('/getunusedgarmentsmaterials/:idgarmentsmaterials', getUnusedGarmentsMaterials);
 
 router.get('/getallgarmentsmaterials', getAllGarmentsMaterials);
 
