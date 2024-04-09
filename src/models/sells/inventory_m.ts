@@ -19,10 +19,10 @@ InventoryModel.init(
             primaryKey: true,
         },
         product_id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         },
         quantity: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         },
     },
 

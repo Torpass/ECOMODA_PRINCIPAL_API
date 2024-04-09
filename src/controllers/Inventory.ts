@@ -21,7 +21,7 @@ export async function createinventory(req: Request, res: Response) {
 
 export async function updateinventory(req: Request, res: Response) {
 	try {
-        const store_id = req.params['idstore'];
+        const store_id = req.params['store_id'];
         const product_id = req.params['product_id'];
         const {quantity} = matchedData(req)
             
@@ -47,7 +47,7 @@ export async function updateinventory(req: Request, res: Response) {
 
 export async function getoneinventory(req: Request, res: Response) {
 	try {
-        const store_id = req.params['idstore'];
+        const store_id = req.params['store_id'];
         const product_id = req.params['product_id'];
         const Inventory = await InventoryModel.findOne({
             where: {store_id: store_id, product_id:product_id}
@@ -78,7 +78,7 @@ export async function getAllInventories(_req: Request, res: Response) {
 
 export async function deleteinventory(req: Request, res : Response) {
     try{
-        const store_id = req.params['idstore'];
+        const store_id = req.params['store_id'];
         const product_id = req.params['product_id'];
         
         await InventoryModel.destroy({
