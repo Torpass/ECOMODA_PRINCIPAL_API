@@ -1,0 +1,1186 @@
+openapi: 3.0.1
+info: 
+  title: API Desging Ecomoda.
+  description: API encargada de manejar la información de la base de datos del equipo de diseño para la empresa Ecomoda.
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/api/collection
+tags:
+- name: collection
+  description: Este endpoint maneja toda la información relacionada con las colecciones.
+  
+- name: garment
+  description: Este endpoint maneja toda la información relacionada con las prendas.
+
+- name: garmentsMaterials
+  description: Este endpoint maneja toda la información relacionada con los materiales de prendas.
+  
+- name: garmentType
+  description: Este endpoint maneja toda la información relacionada con los tipos de prenda.
+  
+- name: materials
+  description: Este endpoint maneja toda la información relacionada con los materials.
+  
+- name: sizes
+  description: Este endpoint maneja toda la información relacionada con las tallas.
+  
+paths:
+
+#COLLECTION
+
+  /createcollection:
+    post:
+      tags:
+      - collection
+      summary: Inserta la información de una nueva colección en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyCollection'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra la colección creada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoCollection'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonecollection/{idcollection}:
+    get:
+      tags:
+      - collection
+      summary: Obtiene la información sobre la colección referenciada.
+      description: Este endpoint obtiene los detalles de una colección específica, incluyendo los modelos de prendas asociados que están activos, junto con sus imágenes, tamaños y tipos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idcollection
+        in: path
+        description: Identificador de colección a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestra la colección seleccionada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collections:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoCollection'
+                        - type: object
+                          properties:
+                            garment:
+                              type: array
+                              items:
+                                allOf:
+                                  - $ref: '#/components/schemas/ExitoGarment'
+                                  - type: object
+                                    properties:
+                                      type:
+                                        type: array
+                                        items:
+                                          $ref: '#/components/schemas/ExitoGarmentType'
+                                      size:
+                                        type: array
+                                        items:
+                                          $ref: '#/components/schemas/ExitoSizes'      
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getallcollection:
+    get:
+      tags:
+      - collection
+      summary: Obtiene la información sobre todas las colecciones.
+      description: Este endpoint obtiene todos los detalles de las colecciones, incluyendo los modelos de prendas asociados que están activos, junto con sus imágenes.
+      parameters:
+      - $ref: '#/components/parameters/token'
+
+      responses:
+        200:
+          description: (OK) Se muestran todas las colecciones.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collections:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoCollection'
+                        - type: object
+                          properties:
+                            garment:
+                              type: array
+                              items:
+                                allOf:
+                                  - $ref: '#/components/schemas/ExitoGarment'
+                                  - type: object
+                                    properties:
+                                      img:
+                                        type: array
+                                        items:
+                                          $ref: '#/components/schemas/ExitoGarmentImg'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getlastcollectiongarments:
+    get:
+      tags:
+      - collection
+      summary: Obtiene las últimas colecciones, prendas y materiales.
+      description: Este endpoint devuelve las últimas 3 colecciones, prendas y materiales ordenados por su ID en orden descendente.
+      responses:
+        200:
+          description: (OK) Se muestran las últimas 3 colecciones, prendas y matteriales.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collections:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExitoCollection'
+                  garments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExitoGarment'
+                  materials:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExitoMaterials'
+        '500':
+          description: Error al obtener las últimas colecciones y prendas
+          
+  /getcount:
+    get:
+      tags:
+      - collection
+      summary: Obtiene el conteo de Colecciones, Prendas y Materiales.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: (OK) Se muestra el conteo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collections:
+                    type: integer
+                    description: El número total de colecciones.
+                  garments:
+                    type: integer
+                    description: El número total de prendas.
+                  materials:
+                    type: integer
+                    description: El número total de materiales.
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updatecollection/{idcollection}:
+    put:
+      tags:
+      - collection
+      summary: Actualiza la información sobre la colección referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idcollection
+        in: path
+        description: Identificador de colección a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyCollection'
+      responses:
+        200:
+          description: (OK) Se muestra la colección actualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoCollection'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletecollection/{idcollection}:
+    delete:
+      tags:
+        - collection
+      summary: Elimina una colección existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idcollection
+        in: path
+        description: Identificador de colección a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Colección eliminada.
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+          
+#GARMENT
+
+  /creategarment:
+    post:
+      tags:
+      - garment
+      summary: Inserta la información de una nueva prenda en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarment'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra la prenda creada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarment'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonegarment/{idgarment}:
+    get:
+      tags:
+      - garment
+      summary: Obtiene la información sobre la prenda referenciada.
+      description: Este endpoint obtiene los detalles de una prenda específica, incluyendo los modelos de colecciones asociados, junto con sus imágenes, tamaños y tipos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarment
+        in: path
+        description: Identificador de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestra la prenda seleccionada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  garment:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoGarment'
+                        - type: object
+                          properties:
+                            collection:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoCollection'
+                            type:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarmentType'
+                            size:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoSizes'
+                            img:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarmentImg'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getallgarment:
+    get:
+      tags:
+      - garment
+      summary: Obtiene la información sobre todas las prendas.
+      description: Este endpoint obtiene todos los detalles de las prendas, incluyendo los modelos de colecciones asociados, junto con sus imágenes, tamaños y tipos.
+      parameters:
+      - $ref: '#/components/parameters/token'
+
+      responses:
+        200:
+          description: (OK) Se muestran todas las prendas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  garment:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoGarment'
+                        - type: object
+                          properties:
+                            collection:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoCollection'
+                            type:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarmentType'
+                            size:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoSizes'
+                            img:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarmentImg'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updategarment/{idgarment}:
+    put:
+      tags:
+      - garment
+      summary: Actualiza la información sobre la prenda referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarment
+        in: path
+        description: Identificador de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarment'
+      responses:
+        200:
+          description: (OK) Se muestra la prenda actualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarment'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletegarment/{idgarment}:
+    put:
+      tags:
+        - garment
+      summary: Deshabilita una prenda existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarment
+        in: path
+        description: Identificador de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Prenda eliminada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentDelete'
+        500:
+          $ref: '#/components/responses/BadRequest'
+
+#GARMENTS_MATERIALS
+
+  /creategarmentsmaterials:
+    post:
+      tags:
+      - garmentsMaterials
+      summary: Inserta la información de un nuevo material de prenda en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarmentsMaterials'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra el material de prenda creado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentsMaterials'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonegarmentsmaterials/{idgarmentsmaterials}:
+    get:
+      tags:
+      - garmentsMaterials
+      summary: Obtiene la información sobre los materiales asociados a una prenda referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarmentsmaterials
+        in: path
+        description: Identificador de materiales de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestran todos los materiales asociados a la prenda seleccionada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  garmentsmaterials:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoGarmentsMaterials'
+                        - type: object
+                          properties:
+                            garment:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarment'
+                            material:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getunusedgarmentsmaterials/{idgarmentsmaterials}:
+    get:
+      tags:
+      - garmentsMaterials
+      summary: Obtiene la información sobre los materiales NO asociados a una prenda referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarmentsmaterials
+        in: path
+        description: Identificador de materiales de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestran todos los materiales NO asociados a la prenda seleccionada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  garmentsmaterials:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoGarmentsMaterials'
+                        - type: object
+                          properties:
+                            garment:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarment'
+                            material:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getallgarmentsmaterials:
+    get:
+      tags:
+      - garmentsMaterials
+      summary: Obtiene la información sobre los materiales de prenda existentes.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: (OK) Se muestran todos los materiales de prenda existentes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  garmentsmaterials:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/ExitoGarmentsMaterials'
+                        - type: object
+                          properties:
+                            garment:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoGarment'
+                            material:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updategarmentsmaterials/{idgarmentsmaterials}:
+    put:
+      tags:
+      - garmentsMaterials
+      summary: Actualiza la información sobre el material de prenda referenciado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarmentsmaterials
+        in: path
+        description: Identificador de materiales de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarmentsMaterials'
+      responses:
+        200:
+          description: (OK) Se muestra el material de prenda actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentsMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletegarmentsmaterials/{idgarmentsmaterials}:
+    delete:
+      tags:
+        - garmentsMaterials
+      summary: Elimina un material de prenda existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idgarmentsmaterials
+        in: path
+        description: Identificador de materiales de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Materiales de prenda eliminados.
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+#GARMENT TYPE
+
+  /createtype:
+    post:
+      tags:
+      - garmentType
+      summary: Inserta la información de un nuevo tipo de prenda en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarmentType'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra el tipo de prenda creado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentType'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonetype/{idtype}:
+    get:
+      tags:
+      - garmentType
+      summary: Obtiene la información sobre el tipo de prenda referenciado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idtype
+        in: path
+        description: Identificador de tipo de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestra la información sobre el tipo de prenda seleccionado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentType'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getalltype:
+    get:
+      tags:
+      - garmentType
+      summary: Obtiene la información sobre los tipos de prenda existentes.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: (OK) Se muestran todos los tipos de prenda existentes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentType'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updatetype/{idtype}:
+    put:
+      tags:
+      - garmentType
+      summary: Actualiza la información sobre el tipo de prenda referenciado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idtype
+        in: path
+        description: Identificador de tipo de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyGarmentType'
+      responses:
+        200:
+          description: (OK) Se muestra el tipo de prenda actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoGarmentType'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletetype/{idtype}:
+    delete:
+      tags:
+        - garmentType
+      summary: Elimina un tipo de prenda existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idtype
+        in: path
+        description: Identificador de tipo de prenda a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Tipo de prenda eliminado.
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+#MATERIALS
+
+  /creatematerial:
+    post:
+      tags:
+      - materials
+      summary: Inserta la información de un nuevo material en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyMaterials'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra el tipo de prenda creado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoMaterials'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonematerial/{idmaterial}:
+    get:
+      tags:
+      - materials
+      summary: Obtiene la información sobre el material referenciado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idmaterial
+        in: path
+        description: Identificador de material a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestra la información sobre el material seleccionado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getallmaterial:
+    get:
+      tags:
+      - materials
+      summary: Obtiene la información sobre los materiales existentes.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: (OK) Se muestran todos los materiales existentes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updatematerial/{idmaterial}:
+    put:
+      tags:
+      - materials
+      summary: Actualiza la información sobre el material referenciado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idmaterial
+        in: path
+        description: Identificador de material a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyMaterials'
+      responses:
+        200:
+          description: (OK) Se muestra el material actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoMaterials'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletematerial/{idmaterial}:
+    delete:
+      tags:
+        - materials
+      summary: Elimina un material existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idmaterial
+        in: path
+        description: Identificador de material a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Material eliminado.
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+#SIZES
+
+  /createsize:
+    post:
+      tags:
+      - sizes
+      summary: Inserta la información de una nueva talla en la BD.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodySizes'
+        required: true
+      responses:
+        200:
+          description: (OK) Se muestra la talla creada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoSizes'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getonesize/{idsize}:
+    get:
+      tags:
+      - sizes
+      summary: Obtiene la información sobre la talla referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idsize
+        in: path
+        description: Identificador de talla a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Se muestra la información sobre la talla seleccionada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoSizes'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /getallsizes:
+    get:
+      tags:
+      - sizes
+      summary: Obtiene la información sobre las tallas existentes.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: (OK) Se muestran todos las tallas existentes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoSizes'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /updatesize/{idsize}:
+    put:
+      tags:
+      - sizes
+      summary: Actualiza la información sobre la talla referenciada.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idsize
+        in: path
+        description: Identificador de talla a obtener
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodySizes'
+      responses:
+        200:
+          description: (OK) Se muestra la talla actualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitoSizes'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/BadRequest'
+          
+  /deletesize/{idsize}:
+    delete:
+      tags:
+        - sizes
+      summary: Elimina una talla existente.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      - name: idsize
+        in: path
+        description: Identificador de talla a obtener
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: (OK) Talla eliminada.
+        500:
+          $ref: '#/components/responses/BadRequest'
+
+components:
+  responses:
+    Unauthorized:
+      description: (Unauthorized) no hay autorización para llamar al servicio.
+      
+    NotFound:
+      description: (NotFound) no se encontró la información.
+    
+    BadRequest:
+      description: (BadRequest) los datos enviados son incorrectos o hay dattos obligatorios no enviados.
+      
+    ServerError:
+      description: (ServerError) Error en el servidor.
+  
+  parameters:
+    token:
+      name: token
+      in: header
+      description: Token de autenticación.
+      required: true
+      schema:
+        type: string
+      
+  schemas:
+    BodyCollection:
+      type: object
+      properties:
+        collection:
+          type: string
+          description: Nombre de la colección.
+        standard_quantity:
+          type: number
+          description: Cantidad de existencias.
+    
+    BodyGarment:
+      type: object
+      properties:
+        garment:
+          type: string
+          description: Nombre de la prenda.
+        garment_type_id: 
+          type: number
+          description: Clave foránea para el tipo de prenda.
+        collection_id: 
+          type: number
+          description: Clave foránea para la colección.
+        size_id: 
+          type: number
+          description: Clave foránea para la talla.
+        pattern: 
+          type: string
+          description: Imágen del patrón de la prenda (URL).
+            
+    BodyGarmentsMaterials:
+      type: object
+      properties:
+        garment_id: 
+          type: number
+          description: Clave foránea para la prenda.
+        material_id: 
+          type: number
+          description: Clave foránea para el material.  
+        quantity:
+          type: number
+          description: Cantidad de existencias.
+          
+    BodyGarmentType:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Nombre del tipo de prenda.
+          
+    BodyMaterials:
+      type: object
+      properties:
+        material:
+          type: string
+          description: Nombre del material.
+        unit:
+          type: string
+          description: Cantidad de existencias, expresadas en metros o unidades.
+        description:
+          type: string
+          description: Descripción del material.
+    
+    BodySizes:
+      type: object
+      properties:
+        size:
+          type: string
+          description: Nombre de la talla.
+          
+    ExitoCollection:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada a la colección.
+        collection:
+          type: string
+          description: Nombre de la colección.
+        standard_quantity:
+          type: number
+          description: Cantidad de existencias.
+          
+    ExitoGarment:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada a la prenda.
+        garment:
+          type: string
+          description: Nombre de la prenda.
+        garment_type_id: 
+          type: number
+          description: Clave foránea para el tipo de prenda.
+        collection_id: 
+          type: number
+          description: Clave foránea para la colección.
+        size_id: 
+          type: number
+          description: Clave foránea para la talla.
+        pattern: 
+          type: string
+          description: Imágen del patrón de la prenda (URL).
+        activo: 
+          type: boolean
+          description: Estado de la prenda.
+    ExitoGarmentDelete:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada a la prenda.
+        garment:
+          type: string
+          description: Nombre de la prenda.
+        garment_type_id: 
+          type: number
+          description: Clave foránea para el tipo de prenda.
+        collection_id: 
+          type: number
+          description: Clave foránea para la colección.
+        size_id: 
+          type: number
+          description: Clave foránea para la talla.
+        pattern: 
+          type: string
+          description: Imágen del patrón de la prenda (URL).
+        activo: 
+          type: boolean
+          description: Estado de la prenda.
+          default: false
+          
+    ExitoGarmentsMaterials:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada al material de la prenda.
+        garment_id: 
+          type: number
+          description: Clave foránea para la prenda.
+        material_id: 
+          type: number
+          description: Clave foránea para el material.  
+        quantity:
+          type: number
+          description: Cantidad de existencias.
+          
+    ExitoGarmentImg:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada a la imagen de prenda.
+        garment_id: 
+          type: number
+          description: Clave foránea para la prenda.
+        URL: 
+          type: string
+          description: Enlace contenedor de la imagen.  
+    
+    ExitoGarmentType:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada al tipo de prenda.
+        type:
+          type: string
+          description: Nombre del tipo de prenda.
+          
+    ExitoMaterials:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada al material.
+        material:
+          type: string
+          description: Nombre del material.
+        unit:
+          type: string
+          description: Cantidad de existencias, expresadas en metros o unidades.
+        description:
+          type: string
+          description: Descripción del material.
+          
+    ExitoSizes:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: ID asignada a la talla.
+        size:
+          type: string
+          description: Nombre de la talla.
+          
+          
+          
+          
