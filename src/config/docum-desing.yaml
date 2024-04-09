@@ -500,23 +500,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  garmentsmaterials:
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/ExitoGarmentsMaterials'
-                        - type: object
-                          properties:
-                            garment:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/ExitoGarment'
-                            material:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/ExitoMaterials'
+                $ref: '#/components/schemas/ExitoMaterials'
         404:
           $ref: '#/components/responses/NotFound'
         500:
