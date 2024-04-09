@@ -4,8 +4,8 @@ import Client from '../interfaces/Clients';
 
 
 class ClientModel extends Model<Client> implements Client {
-    id!: number;
-    name!: string;
+    public id!: number;
+    public name!: string;
 
     // Metodos personalizados
     

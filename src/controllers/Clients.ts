@@ -7,7 +7,6 @@ export async function createclient(req: Request, res: Response) {
 	try {
         const {id} = matchedData(req);
         const {name} = matchedData(req)
-        console.log(id);
         // const storecred = await InventoryModel.create({name});
         const client_cred = await ClientModel.create({id, name})
         return res.status(200).send({client_cred});
