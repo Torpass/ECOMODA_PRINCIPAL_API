@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
-import InventoryModel from '../models/sells/Invoice_det';
 import Factura_det_Model from '../models/sells/Invoice_det';
 
 
@@ -13,12 +12,12 @@ export async function createinvoice(req: Request, res: Response) {
         const {discount} = matchedData(req)
         console.log(inventory_id);
         // const storecred = await InventoryModel.create({name});
-        const fact_cred = await InventoryModel.create({inventory_id, invoice_id, quantity, price, discount})
+        const fact_cred = await Factura_det_Model.create({inventory_id, invoice_id, quantity, price, discount})
         return res.status(200).send({fact_cred});
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_CREATING_FACTURA');
+		return res.status(500).send('ERROR_CREATING_INVOICE');
 	}
 }
 
@@ -45,7 +44,7 @@ export async function updateinvoice(req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETING_Factura');
+		return res.status(500).send('ERROR_GETING_INVOICE');
 	}
 }
 
@@ -59,14 +58,14 @@ export async function getoneInvoice(req: Request, res: Response) {
             where: {inventory_id: inventory_id, invoice_id:invoice_id}
         });
 
-        if(!Factura) return res.status(404).send('FACTURA_NOT_FOUND');
+        if(!Factura) return res.status(404).send('INVOICE_NOT_FOUND');
 
 
         return res.status(200).send({Factura});
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETING_FACTURA');
+		return res.status(500).send('ERROR_GETTING_INVOICE');
 	}
 }
 
@@ -78,7 +77,7 @@ export async function getAllInvoices(_req: Request, res: Response) {
 
 	} catch (error: any) {
 		console.log(error);
-		return res.status(500).send('ERROR_GETING_FACTURAS');
+		return res.status(500).send('ERROR_GETTING_INVOICES');
 	}
 }
 
@@ -87,16 +86,16 @@ export async function deleteInvoice(req: Request, res : Response) {
         const inventory_id = req.params['inventory_id'];
         const invoice_id = req.params['invoice_id'];
         
-        await InventoryModel.destroy({
+        await Factura_det_Model.destroy({
             where: {
                 inventory_id: inventory_id,
                 invoice_id: invoice_id
             },
           });
-        return res.status(500).send('FACTURA_DELETED');
+        return res.status(500).send('INVOICE_DELETED');
     }catch(error: any){
         console.log(error);
-        return res.status(500).send('ERROR_DELETING_FACTURA');
+        return res.status(500).send('ERROR_DELETING_INVOICE');
     }
     
 }
