@@ -66,7 +66,7 @@ export async function getOneCollection(req: Request, res: Response) {
               ],
             },
             ],
-            where: {id: idcollection}
+            where: {id: idcollection, activo:1}
             
         });
 
@@ -85,13 +85,13 @@ export async function getAllCollection(_req: Request, res: Response) {
 	try {
         const collections = await collectionModel.findAll({
             include: [
-                { model: GarmentModel, where: {activo: true},
+                { model: GarmentModel, required: false, where: {activo: true},
                     include: [
                         {
                           model: GarmentImagenModel,
                         },
                       ],}
-                ],
+                ],where: {activo:1},
             });
 
         return res.status(200).send({collections});
@@ -143,7 +143,7 @@ export async function getCounts(_req: Request, res: Response) {
 
 
 
-export async function deleteCollection(req: Request, res : Response) {
+export async function deleteCollection2(req: Request, res : Response) {
     try{
         const {idcollection} = req.params;
         
@@ -157,4 +157,25 @@ export async function deleteCollection(req: Request, res : Response) {
         console.log(error);
         return res.status(500).send('ERROR_DELETING_COLLECTION');
     }
+}
+export async function deleteCollection(req: Request, res: Response) {
+	try {
+        const {idcollection} = req.params;
+            
+        await collectionModel.update(
+            { activo: false },
+            { where: { id: idcollection } }
+          );
+        
+
+        const collectionDeleted = await collectionModel.findOne({where: {id: idcollection}})
+
+        if(!collectionDeleted) return res.status(404).send('Collection_Not_Found')
+
+        return res.status(200).send({collectionDeleted})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_DELETING_GARMENT');
+	}
 }

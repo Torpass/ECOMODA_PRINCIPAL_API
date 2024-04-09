@@ -17,7 +17,7 @@ router.get('/getonecollection/:idcollection', getOneCollection);
 
 router.get('/getallcollection', getAllCollection);
 
-router.delete('/deletecollection/:idcollection',
+router.put('/deletecollection/:idcollection',
             deleteCollection
 );
 

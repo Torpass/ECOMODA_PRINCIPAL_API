@@ -24,7 +24,7 @@ export async function createGarmentsMaterials(req: Request, res: Response) {
     }
 }
 
-export async function updateGarmentsMaterials(req: Request, res: Response) {
+export async function updateGarmentsMaterials2(req: Request, res: Response) {
 	try {
         const {idgarmentsmaterials} = req.params;
         const { garment_id, material_id, quantity } = matchedData(req);
@@ -48,6 +48,30 @@ export async function updateGarmentsMaterials(req: Request, res: Response) {
 		return res.status(500).send('ERROR_GETTING_GARMENTS_MATERIALS');
 	}
 }
+export async function updateGarmentsMaterials(req: Request, res: Response) {
+	try {
+        const {idgarmentsmaterials} = req.params;
+        const { quantity } = matchedData(req);
+            
+        const garmentsmaterialsUp = await GarmentsMaterialsModel.update({
+            quantity
+        },{
+            where: {id: idgarmentsmaterials}
+        });
+
+        const garmentsmaterialsUpted = await GarmentsMaterialsModel.findOne({where: {id: idgarmentsmaterials}})
+
+        if(!garmentsmaterialsUpted) return res.status(404).send('GarmentsMaterials_Not_Found')
+
+        return res.status(200).send({garmentsmaterialsUpted, garmentsmaterialsUp})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_GETTING_GARMENTS_MATERIALS');
+	}
+}
+
+
 
 export async function getOneGarmentsMaterials(req: Request, res: Response) {
 	try {

@@ -11,7 +11,7 @@ router.post('/creategarment',
         {name: 'pattern', maxCount: 1}
     ]), 
     garmentValidator,
-    createGarment,
+    createGarment
 );
 
 router.put('/updategarment/:idgarment',

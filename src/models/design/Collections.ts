@@ -11,6 +11,8 @@ class CollectionModel extends Model<Collections> implements Collections {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
+    public activo!: boolean;
+
     // Metodos personalizados
     
 }
@@ -27,6 +29,9 @@ CollectionModel.init(
         standard_quantity: {
             type: DataTypes.INTEGER,
         },
+        activo:{
+            type: DataTypes.BOOLEAN
+        }
     },
 
     {

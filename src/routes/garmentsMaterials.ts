@@ -9,7 +9,6 @@ router.post('/creategarmentsmaterials',
 );
 
 router.put('/updategarmentsmaterials/:idgarmentsmaterials',
-            GarmentsMaterialsValidator,
             updateGarmentsMaterials
 );
 

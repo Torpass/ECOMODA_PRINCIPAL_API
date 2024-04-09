@@ -30,7 +30,7 @@ export async function createGarment(req: Request, res: Response) {
                 collection_id: numericCollectionId,
                 size_id: numericSizeId,
                 garment_type_id: numericGarmentTypeId,
-                pattern
+                pattern,
             }, { transaction: t });
 
             const imagenes = imagenesReq.split(' ').map((imagen: string) => {
