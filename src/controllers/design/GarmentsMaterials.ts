@@ -53,7 +53,7 @@ export async function getOneGarmentsMaterials(req: Request, res: Response) {
 	try {
         const {idgarmentsmaterials} = req.params;
 
-        const garmentsmaterials = await GarmentsMaterialsModel.findAll({
+        const garmentsMaterials = await GarmentsMaterialsModel.findAll({
             include: [
                 { model: GarmentModel, where: {activo: true}}, 
                 { model: MaterialModel}
@@ -61,9 +61,9 @@ export async function getOneGarmentsMaterials(req: Request, res: Response) {
             where: {garment_id: idgarmentsmaterials}
         });
 
-        if(garmentsmaterials.length === 0) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
+        if(garmentsMaterials.length === 0) return res.status(404).send('GARMENTS_MATERIALS_NOT_FOUND');
 
-        return res.status(200).send({garmentsmaterials});
+        return res.status(200).send({garmentsMaterials});
 
 	} catch (error: any) {
 		console.log(error);
