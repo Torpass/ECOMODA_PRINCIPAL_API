@@ -76,12 +76,10 @@ export async function getAllClients(_req: Request, res: Response) {
 export async function deleteclient(req: Request, res : Response) {
     try{
         const id = req.params['id'];
-        const name = req.params['name'];
         
         await ClientModel.destroy({
             where: {
-              id: id,
-              name: name
+              id: id
             },
           });
         return res.status(500).send('COSTUMER_DELETED');
