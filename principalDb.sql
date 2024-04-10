@@ -28,6 +28,7 @@ CREATE TABLE `collections` (
   `standard_quantity` int DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -77,6 +78,7 @@ CREATE TABLE `garment_materials` (
   `garment_id` int DEFAULT NULL,
   `material_id` int DEFAULT NULL,
   `quantity` decimal(10,2) DEFAULT NULL,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_garment_materials_garments_idx` (`garment_id`),
@@ -96,6 +98,7 @@ DROP TABLE IF EXISTS `garment_types`;
 CREATE TABLE `garment_types` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type` varchar(45) DEFAULT NULL,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -115,6 +118,7 @@ CREATE TABLE `garments` (
   `garment_type_id` int DEFAULT NULL,
   `size_id` int DEFAULT NULL,
   `collection_id` int DEFAULT NULL,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_garments_garment_types_idx` (`garment_type_id`),
@@ -192,6 +196,7 @@ CREATE TABLE `materials` (
   `material` varchar(256) DEFAULT NULL,
   `unit` enum('meters','unit') DEFAULT NULL COMMENT 'unit enum represents how materials are counted, in this case; metters ',
   `description` text,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -278,6 +283,7 @@ DROP TABLE IF EXISTS `sizes`;
 CREATE TABLE `sizes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `size` varchar(45) DEFAULT NULL,
+  'activo' boolean DEFAULT TRUE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

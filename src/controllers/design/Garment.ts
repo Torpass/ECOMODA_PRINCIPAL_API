@@ -141,7 +141,7 @@ export async function getAllGarments(_req: Request, res: Response) {
             { where: { garment_id: idgarment } }
           );
           await GarmentsMaterialsModel.update(
-            { garment_id: null as any}, 
+            { activo: false as any}, 
             { where: { garment_id: idgarment } }
           );
         

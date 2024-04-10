@@ -3,4 +3,5 @@ export default interface GarmentsMaterials {
     garment_id: number;
     material_id: number;
     quantity: number;
+    activo?: boolean;
 }

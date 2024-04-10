@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
 import sizeModel from '../../models/design/Sizes';
+import GarmentModel from '../../models/design/Garment';
 
 export async function createSize(req: Request, res: Response) {
 	try {
@@ -46,7 +47,7 @@ export async function getOneSize(req: Request, res: Response) {
         const {idsize} = req.params;
 
         const size = await sizeModel.findOne({
-            where: {id: idsize}
+            where: {id: idsize, activo: 1}
         });
 
         if(!size) return res.status(404).send('SIZE_NOT_FOUND');
@@ -62,7 +63,9 @@ export async function getOneSize(req: Request, res: Response) {
 
 export async function getAllSizes(_req: Request, res: Response) {
 	try {
-        const sizes = await sizeModel.findAll();
+        const sizes = await sizeModel.findAll({
+            where: {activo: 1}
+        });
 
         return res.status(200).send({sizes});
 
@@ -72,18 +75,28 @@ export async function getAllSizes(_req: Request, res: Response) {
 	}
 }
 
-export async function deleteSize(req: Request, res : Response) {
-    try{
+export async function deleteSize(req: Request, res: Response) {
+	try {
         const {idsize} = req.params;
+            
+        await sizeModel.update(
+            { activo: false },
+            { where: { id: idsize } }
+          );
+        await GarmentModel.update(
+            { size_id: null as any}, 
+            { where: { size_id: idsize } }
+          );
         
-        await sizeModel.destroy({
-            where: {
-              id: idsize
-            },
-          });
-        return res.status(200).send('SIZE_DELETED');
-    }catch(error: any){
-        console.log(error);
-        return res.status(500).send('ERROR_DELETING_SIZE');
-    }
+
+        const sizeDeleted = await sizeModel.findOne({where: {id: idsize}})
+
+        if(!sizeDeleted) return res.status(404).send('Size_Not_Found')
+
+        return res.status(200).send({sizeDeleted})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_DELETING_SIZE');
+	}
 }

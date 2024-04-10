@@ -6,7 +6,8 @@ class GarmentsMaterialsModel extends Model<GarmentsMaterials> implements Garment
     public id!: number;
     public garment_id!: number;
     public material_id!: number;
-    public quantity!: number; 
+    public quantity!: number;
+    public activo!: boolean;
 }
 
 GarmentsMaterialsModel.init(
@@ -24,6 +25,9 @@ GarmentsMaterialsModel.init(
         },
         quantity: {
             type: DataTypes.DECIMAL,
+        },
+        activo:{
+            type: DataTypes.BOOLEAN
         }
     },
     {

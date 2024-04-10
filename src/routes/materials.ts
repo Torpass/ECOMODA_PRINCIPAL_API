@@ -17,7 +17,7 @@ router.get('/getonematerial/:idmaterial', getOneMaterial);
 
 router.get('/getallmaterial', getAllMaterials);
 
-router.delete('/deletematerial/:idmaterial',
+router.put('/deletematerial/:idmaterial',
             deleteMaterial
 );
 module.exports = router;

@@ -17,7 +17,7 @@ router.get('/getonesize/:idsize', getOneSize);
 
 router.get('/getallsizes', getAllSizes);
 
-router.delete('/deletesize/:idsize',
+router.put('/deletesize/:idsize',
             deleteSize
 );
 module.exports = router;

@@ -5,6 +5,7 @@ import Size from '../interfaces/Size';
 class SizeModel extends Model<Size> implements Size {
     public id!: number;
     public size!: string;
+    public activo!: boolean;
 
     // Metodos personalizados
     
@@ -19,6 +20,9 @@ SizeModel.init(
         size: {
             type: DataTypes.STRING,
         },
+        activo:{
+            type: DataTypes.BOOLEAN
+        }
     },
 
     {

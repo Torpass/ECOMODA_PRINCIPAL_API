@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
 import GarmentType from '../../models/design/GarmentType';
+import GarmentTypeModel from '../../models/design/GarmentType';
+import GarmentModel from '../../models/design/Garment';
 
 export async function createGarmentType (req: Request, res: Response) {
 	try {
@@ -44,7 +46,7 @@ export async function getOneGarmentType(req: Request, res: Response) {
         const {idtype} = req.params;
 
         const type = await GarmentType.findOne({
-            where: {id: idtype}
+            where: {id: idtype, activo: 1}
         });
 
         if(!type) return res.status(404).send('TYPE_NOT_FOUND');
@@ -60,7 +62,10 @@ export async function getOneGarmentType(req: Request, res: Response) {
 
 export async function getAllGarmentType (_req: Request, res: Response) {
 	try {
-        const types = await GarmentType.findAll();
+        const types = await GarmentType.findAll({
+            where: {activo: 1}
+        });
+        
 
         return res.status(200).send({types});
 
@@ -70,18 +75,28 @@ export async function getAllGarmentType (_req: Request, res: Response) {
 	}
 }
 
-export async function deleteGarmentType (req: Request, res : Response) {
-    try{
+export async function deleteGarmentType(req: Request, res: Response) {
+	try {
         const {idtype} = req.params;
+            
+        await GarmentTypeModel.update(
+            { activo: false },
+            { where: { id: idtype } }
+          );
+        await GarmentModel.update(
+            { garment_type_id: null as any}, 
+            { where: { garment_type_id: idtype } }
+          );
         
-        await GarmentType.destroy({
-            where: {
-              id: idtype
-            },
-          });
-        return res.status(200).send('TYPE_DELETED');
-    }catch(error: any){
-        console.log(error);
-        return res.status(500).send('ERROR_DELETING_TYPE');
-    }
+
+        const garmentTypeDeleted = await GarmentTypeModel.findOne({where: {id: idtype}})
+
+        if(!garmentTypeDeleted) return res.status(404).send('Garment_Type_Not_Found')
+
+        return res.status(200).send({garmentTypeDeleted})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_DELETING_GARMENT_TYPE');
+	}
 }
