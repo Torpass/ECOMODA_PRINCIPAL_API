@@ -17,7 +17,7 @@ router.get('/getonetype/:idtype', getOneGarmentType);
 
 router.get('/getalltype', getAllGarmentType);
 
-router.delete('/deletetype/:idtype',
+router.put('/deletetype/:idtype',
             deleteGarmentType
 );
 module.exports = router;

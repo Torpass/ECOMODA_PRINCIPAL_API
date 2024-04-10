@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
 import materialModel from '../../models/design/Materials';
+import GarmentsMaterialsModel from '../../models/design/GarmentsMaterials';
 
 export async function createMaterial(req: Request, res: Response) {
 	try {
@@ -46,7 +47,7 @@ export async function getOneMaterial(req: Request, res: Response) {
         const {idmaterial} = req.params;
 
         const material = await materialModel.findOne({
-            where: {id: idmaterial}
+            where: {id: idmaterial, activo: 1}
         });
 
         if(!material) return res.status(404).send('MATERIAL_NOT_FOUND');
@@ -62,7 +63,9 @@ export async function getOneMaterial(req: Request, res: Response) {
 
 export async function getAllMaterials(_req: Request, res: Response) {
 	try {
-        const materials = await materialModel.findAll();
+        const materials = await materialModel.findAll({
+            where: {activo: 1}
+        });
 
         return res.status(200).send({materials});
 
@@ -72,18 +75,28 @@ export async function getAllMaterials(_req: Request, res: Response) {
 	}
 }
 
-export async function deleteMaterial(req: Request, res : Response) {
-    try{
+export async function deleteMaterial(req: Request, res: Response) {
+	try {
         const {idmaterial} = req.params;
+            
+        await materialModel.update(
+            { activo: false },
+            { where: { id: idmaterial } }
+          );
+        await GarmentsMaterialsModel.update(
+            { activo: false as any}, 
+            { where: { material_id: idmaterial } }
+          );
         
-        await materialModel.destroy({
-            where: {
-              id: idmaterial
-            },
-          });
-        return res.status(200).send('MATERIAL_DELETED');
-    }catch(error: any){
-        console.log(error);
-        return res.status(500).send('ERROR_DELETING_MATERIAL');
-    }
+
+        const materialDeleted = await materialModel.findOne({where: {id: idmaterial}})
+
+        if(!materialDeleted) return res.status(404).send('Material_Not_Found')
+
+        return res.status(200).send({materialDeleted})
+
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).send('ERROR_DELETING_MATERIAL');
+	}
 }

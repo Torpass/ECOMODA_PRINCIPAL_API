@@ -18,7 +18,7 @@ router.get('/getunusedgarmentsmaterials/:idgarmentsmaterials', getUnusedGarments
 
 router.get('/getallgarmentsmaterials', getAllGarmentsMaterials);
 
-router.delete('/deletegarmentsmaterials/:idgarmentsmaterials',
+router.put('/deletegarmentsmaterials/:idgarmentsmaterials',
             deleteGarmentsMaterials
 );
 module.exports = router;

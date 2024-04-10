@@ -107,15 +107,18 @@ export async function getLastCollectionGarments(_req: Request, res: Response) {
         const collections = await collectionModel.findAll({
             order: [['id', 'DESC']],
             limit: 3,
+            where: {activo:1}
           });
 
         const garments = await GarmentModel.findAll({
             order: [['id', 'DESC']],
             limit: 3,
+            where: {activo:1}
         });
         const materials = await MaterialModel.findAll({
           order: [['id', 'DESC']],
           limit: 3,
+          where: {activo:1}
         });
 
         return res.status(200).send({collections, garments, materials});
@@ -128,9 +131,15 @@ export async function getLastCollectionGarments(_req: Request, res: Response) {
 
 export async function getCounts(_req: Request, res: Response) {
 	try {
-    const Colecciones = await collectionModel.count();
-    const Prendas = await GarmentModel.count();
-    const Materiales = await MaterialModel.count();
+    const Colecciones = await collectionModel.count({
+      where: {activo: 1}
+    });
+    const Prendas = await GarmentModel.count({
+      where: {activo: 1}
+    });
+    const Materiales = await MaterialModel.count({
+      where: {activo: 1}
+    });
 
         return res.status(200).send({Colecciones, Prendas, Materiales});
 
@@ -140,24 +149,6 @@ export async function getCounts(_req: Request, res: Response) {
 	}
 }
 
-
-
-
-export async function deleteCollection2(req: Request, res : Response) {
-    try{
-        const {idcollection} = req.params;
-        
-        await collectionModel.destroy({
-            where: {
-              id: idcollection
-            },
-          });
-        return res.status(200).send('COLLECTION_DELETED');
-    }catch(error: any){
-        console.log(error);
-        return res.status(500).send('ERROR_DELETING_COLLECTION');
-    }
-}
 export async function deleteCollection(req: Request, res: Response) {
 	try {
         const {idcollection} = req.params;
@@ -165,6 +156,10 @@ export async function deleteCollection(req: Request, res: Response) {
         await collectionModel.update(
             { activo: false },
             { where: { id: idcollection } }
+          );
+        await GarmentModel.update(
+            { collection_id: null as any}, 
+            { where: { collection_id: idcollection } }
           );
         
 
