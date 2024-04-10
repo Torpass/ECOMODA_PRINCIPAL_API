@@ -5,8 +5,7 @@ const router = express.Router();
 
 router.post('/createclient', clientvalt, createclient);
 
-router.put('/updateclient/:id',
-           
+router.put('/updateclient/:id',clientvalt,          
     updateclient
 );
 

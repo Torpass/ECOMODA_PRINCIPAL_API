@@ -21,9 +21,9 @@ export async function updateclient(req: Request, res: Response) {
 	try {
         const id = req.params['id'];
         const {name} = matchedData(req);
-            
+        console.log(id);
         const posup = await ClientModel.update({
-            name:name
+            name
         },{
             where: {id} 
         });
