@@ -10,7 +10,7 @@ import { sequelize } from "../../config/db";
 import GarmentsMaterialsModel from '../../models/design/GarmentsMaterials';
 
 export async function createGarment(req: Request, res: Response) {
-  try {
+    try {
         if (!req.body.imagen) return res.status(400).send('ERROR_GETTING_IMAGES');
 
         const { garment, collection_id, garment_type_id, size_id } = matchedData(req);
@@ -19,11 +19,12 @@ export async function createGarment(req: Request, res: Response) {
         const numericGarmentTypeId = parseInt(garment_type_id);
         const numericSizeId = parseInt(size_id);
         let imagenesReq = req.body.imagen;
-        
+
         const imagenesArray = imagenesReq.split(' ');
         const pattern: string = imagenesArray.length > 0 ? imagenesArray[imagenesArray.length - 1].trim() : '';
-        
-        
+        imagenesArray.pop()
+        const garmentImages = imagenesArray;
+
         const resultTransaction = await sequelize.transaction(async (t: any) => {
             const garmentCreated = await garmentModel.create({
                 garment,
@@ -33,27 +34,26 @@ export async function createGarment(req: Request, res: Response) {
                 pattern,
             }, { transaction: t });
 
-            const imagenes = imagenesReq.split(' ').map((imagen: string) => {
+            const imagenes = garmentImages.map((imagen: string) => {
                 return {
                     garment_id: garmentCreated.id,
-                    URL: imagen.trim() 
+                    URL: imagen.trim()
                 };
             });
-        
+
 
             await GarmentImagenModel.bulkCreate(imagenes, { transaction: t });
             return {
                 garmentCreated,
-                imagenesReq
+                garmentImages
             };
         });
-        
-            return res.status(200).send({
-                garmentCreated: resultTransaction.garmentCreated,
-                garmentImagenes: resultTransaction.imagenesReq
-            });
+
+        return res.status(200).send({
+            garmentCreated: resultTransaction.garmentCreated,
+            garmentImagenes: resultTransaction.garmentImages
+        });
     } catch (err: any) {
-        throw err;
         console.log(err);
         return res.status(500).send('Error al crear la prenda');
     }
