@@ -85,7 +85,7 @@ export async function getUnusedGarmentsMaterials(req: Request, res: Response) {
 
         // Luego, buscamos en la tabla Materials aquellos que no están en la lista de usados
         const unusedMaterials = await MaterialModel.findAll({
-            where: { id: { [Op.notIn]: usedMaterialIds, activo: 1 } }
+            where: { id: { [Op.notIn]: usedMaterialIds} }
         });
 
         if(unusedMaterials.length === 0) return res.status(404).send('MATERIALS_NOT_FOUND');
@@ -97,6 +97,7 @@ export async function getUnusedGarmentsMaterials(req: Request, res: Response) {
 		return res.status(500).send('ERROR_GETTING_GARMENTS_MATERIALS');
 	}
 }
+
 
 export async function getAllGarmentsMaterials(_req: Request, res: Response) {
 	try {
